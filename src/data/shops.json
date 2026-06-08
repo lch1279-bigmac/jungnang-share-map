@@ -1,0 +1,802 @@
+[
+  {
+    "name": "이상연보청기",
+    "category": "보건의료",
+    "address": "서울시 서초구 서초동 1691-8 건일빌딩 6층",
+    "service": "7월 부터 홀수달 1회진료",
+    "note": "",
+    "frequency": "정기"
+  },
+  {
+    "name": "중희 부대찌개",
+    "category": "식품",
+    "address": "서울시 중랑구 면목동 179-115",
+    "service": "식사",
+    "note": "코로나 중단(22년 2월) 23년 7월부터 재가동",
+    "frequency": "월1회"
+  },
+  {
+    "name": "풀잎보리쌈밥생고기",
+    "category": "식품",
+    "address": "서울 중랑구 중화2동 208-1",
+    "service": "오리제공(4명)",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "신성기사식당",
+    "category": "식품",
+    "address": "서울 중랑구 면목본동 105-3",
+    "service": "월1회 4명",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "비단방앗간",
+    "category": "식품",
+    "address": "서울시 중랑구 면목동 177-2 1층",
+    "service": "떡 지원",
+    "note": "",
+    "frequency": "정기"
+  },
+  {
+    "name": "한가네육곳간 (안심축산 정육식당)",
+    "category": "식품",
+    "address": "서울시 중랑구 면목본동 103-9",
+    "service": "월 4회(20명)",
+    "note": "",
+    "frequency": "월4회(20명)"
+  },
+  {
+    "name": "파리바게트 면목동부점",
+    "category": "식품",
+    "address": "서울 중랑구 동일로 101길 49 1층",
+    "service": "빵",
+    "note": "",
+    "frequency": "주1회"
+  },
+  {
+    "name": "㈜로뎀푸드",
+    "category": "식품",
+    "address": "경기도 포천시 화현면 화동로 513",
+    "service": "죽 지원",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "이모네 반찬",
+    "category": "식품",
+    "address": "서울시 중랑구 면목5동 174-33호",
+    "service": "반찬지원",
+    "note": "",
+    "frequency": "주1회"
+  },
+  {
+    "name": "형제야채",
+    "category": "식품",
+    "address": "서울 중랑구 면목3,8동 461-30",
+    "service": "야채지원",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "소망상회",
+    "category": "식품",
+    "address": "서울 중랑구 면목3동 473-6",
+    "service": "양말지원",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "동부건어물",
+    "category": "식품",
+    "address": "서울 중랑구 면목3,8동 472-12",
+    "service": "김 지원",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "은혜당약국",
+    "category": "보건의료",
+    "address": "서울 중랑구 면목2동 184-54",
+    "service": "파스지원(12,000원)",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "낙원복떡집",
+    "category": "식품",
+    "address": "서울 중랑구 면목2동 181-130",
+    "service": "떡 지원",
+    "note": "",
+    "frequency": "수시"
+  },
+  {
+    "name": "정이네정육식자재마트",
+    "category": "식품",
+    "address": "서울 중랑구 봉우재로 14길 4",
+    "service": "소.돈육 지원",
+    "note": "",
+    "frequency": "수시"
+  },
+  {
+    "name": "황금식자재유통",
+    "category": "식품",
+    "address": "서울 중랑구 면목동 192-70",
+    "service": "쌀20kg 지원",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "햇살두부촌",
+    "category": "식품",
+    "address": "서울시 중랑구 상봉로 23 1층",
+    "service": "두부지원",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "샬롬 중화요리",
+    "category": "식품",
+    "address": "서울시 중랑구 망우동 530-2",
+    "service": "짜장밥 2인분",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "좋은 정육점",
+    "category": "식품",
+    "address": "서울시 중랑구 면목동 100-31 (동원시장 안)",
+    "service": "매월 25일 고기지원",
+    "note": "",
+    "frequency": "월2회"
+  },
+  {
+    "name": "박가네추어탕",
+    "category": "식품",
+    "address": "중랑구 면목동150-4",
+    "service": "추어탕",
+    "note": "",
+    "frequency": "수시"
+  },
+  {
+    "name": "가나안약국",
+    "category": "보건의료",
+    "address": "서울시 중랑구 봉우재로39",
+    "service": "파스",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "고려약국",
+    "category": "보건의료",
+    "address": "서울 중랑구 면목동 74-1",
+    "service": "파스",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "365밝은약국",
+    "category": "보건의료",
+    "address": "서울 중랑구 면목7동 634-50",
+    "service": "파스",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "홈마트",
+    "category": "식품",
+    "address": "서울 중랑구 면목2동 181-74",
+    "service": "기저귀, 라면 지원",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "이가이불매장",
+    "category": "생활·의류",
+    "address": "서울 중랑구 면목2동 181-28",
+    "service": "결연후원금",
+    "note": "",
+    "frequency": "매월 말일"
+  },
+  {
+    "name": "명가떡집",
+    "category": "식품",
+    "address": "서울시 중랑구 면목동 180-50",
+    "service": "떡지원",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "시월에도토리",
+    "category": "식품",
+    "address": "서울시 중랑구 동일로109길 90",
+    "service": "식사지원",
+    "note": "",
+    "frequency": "주1회"
+  },
+  {
+    "name": "짜장나루",
+    "category": "식품",
+    "address": "서울시 중랑구 겸재로 161",
+    "service": "식사지원",
+    "note": "",
+    "frequency": "주1회(2명)"
+  },
+  {
+    "name": "엔젤스베이커리",
+    "category": "식품",
+    "address": "서울시 중랑구 봉우재로 14길 8",
+    "service": "빵",
+    "note": "",
+    "frequency": "수시"
+  },
+  {
+    "name": "대흥정육점",
+    "category": "식품",
+    "address": "서울시 중랑구 봉우재로8",
+    "service": "고기",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "태릉솔밭갈비",
+    "category": "식품",
+    "address": "서울시 중랑구 면목2동 176-21",
+    "service": "비지정후원금",
+    "note": "",
+    "frequency": "매월 말일"
+  },
+  {
+    "name": "미래약국",
+    "category": "식품",
+    "address": "서울시 중랑구 면목 2동 147-7",
+    "service": "파스",
+    "note": "",
+    "frequency": "비정기"
+  },
+  {
+    "name": "동부왕족발",
+    "category": "식품",
+    "address": "서울시 중랑구 봉우재로 33길 38",
+    "service": "식품",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "동원당한의원",
+    "category": "보건의료",
+    "address": "서울시 중랑구 면목동 101-40",
+    "service": "파스",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "건강제일온누리약국",
+    "category": "보건의료",
+    "address": "중랑구 중화1동 288-1 두암빌딩 1층",
+    "service": "파스",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "하나감자탕",
+    "category": "식품",
+    "address": "서울시 중랑구 동일로 101길 52 세진빌딩 1층",
+    "service": "반찬 지원",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "아침목장정육식당",
+    "category": "식품",
+    "address": "서울시 중랑구 동일로 96길 8",
+    "service": "고기지원",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "진미황칠 순대국삼계탕",
+    "category": "식품",
+    "address": "서울시 중랑구 상봉동 112-29",
+    "service": "순대국 지원",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "바다회천국",
+    "category": "식품",
+    "address": "서울시 중랑구 상봉동 130-72",
+    "service": "대구탕지원",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "무궁화손만두보쌈 (바다예찬)",
+    "category": "식품",
+    "address": "서울시 중랑구 면목2동 147-11",
+    "service": "점식식사 지원",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "이삭칼국수돈가스",
+    "category": "식품",
+    "address": "서울시 중랑구 사가정로 50길 51",
+    "service": "묵 지원",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "우림식품",
+    "category": "식품",
+    "address": "서울시 중랑구 망우로 62길",
+    "service": "반찬 지원",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "튼튼약국",
+    "category": "보건의료",
+    "address": "서울시 중랑구 면목로 358",
+    "service": "파스 지원",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "손약국",
+    "category": "보건의료",
+    "address": "서울시 중랑구 중랑역로 62",
+    "service": "파스 지원",
+    "note": "기부금영수증 매월 팩스발송 요청",
+    "frequency": "월1회"
+  },
+  {
+    "name": "태준상회",
+    "category": "식품",
+    "address": "서울시 중랑구 면목본동 103-2",
+    "service": "채소 지원",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "알뜰할인마트",
+    "category": "식품",
+    "address": "서울시 중랑구 봉우재로 14길 15",
+    "service": "식료품 지원",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "충청도순대",
+    "category": "식품",
+    "address": "서울시 중랑구 상봉로 11길 55",
+    "service": "순대국 지원",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "푸드카페",
+    "category": "식품",
+    "address": "서울시 중랑구 용마산로 494",
+    "service": "김밥 지원",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "CU중랑송계공원점",
+    "category": "식품",
+    "address": "서울시 중랑구 동일로 95길 22 천마빌딩 1층",
+    "service": "식료품 지원",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "은혜떡집",
+    "category": "식품",
+    "address": "서울시 중랑구 면목로 435길 15",
+    "service": "떡 지원",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "두채사랑전주콩나물국밥",
+    "category": "식품",
+    "address": "서울특별시 중랑구 면목로 371 시온교회",
+    "service": "월1회 2명 식사제공",
+    "note": "8월부터 시작",
+    "frequency": "월1회"
+  },
+  {
+    "name": "올유니드",
+    "category": "식품",
+    "address": "중랑구 면목동 177-130",
+    "service": "월 1회 한라봉차 8잔",
+    "note": "10월부터 시작",
+    "frequency": "월1회"
+  },
+  {
+    "name": "여울목찜쌈밥",
+    "category": "식품",
+    "address": "면목2동 177-36",
+    "service": "월 1회 어르신 두명 쌈밥정식 제공",
+    "note": "10월부터 시작",
+    "frequency": "월1회"
+  },
+  {
+    "name": "한신김밥",
+    "category": "식품",
+    "address": "겸재로3길 34 밝은빛교회 1층",
+    "service": "월 1회 김밥 1줄 이상 제공",
+    "note": "10월부터 시작",
+    "frequency": "월1회"
+  },
+  {
+    "name": "주부정육점",
+    "category": "식품",
+    "address": "중랑구 봉우재로 14길 8 1층",
+    "service": "월 1회 정육 제공",
+    "note": "11월부터",
+    "frequency": "월1회"
+  },
+  {
+    "name": "낙원떡집",
+    "category": "식품",
+    "address": "서울특별시 중랑구 봉우재로14길 20 낙원떡집",
+    "service": "월 1회",
+    "note": "",
+    "frequency": "월1회"
+  },
+  {
+    "name": "디저트파파",
+    "category": "식품",
+    "address": "서울 중랑구 겸재로 3길 22 1층",
+    "service": "월 1회",
+    "note": "1월",
+    "frequency": "월1회"
+  },
+  {
+    "name": "하동우렁추어탕",
+    "category": "식품",
+    "address": "서울시 중랑구 면목로 424",
+    "service": "월 1회 추어탕 5개",
+    "note": "1월",
+    "frequency": "월1회"
+  },
+  {
+    "name": "집밥뚝딱 중화점",
+    "category": "식품",
+    "address": "서울 중랑구 중랑역로 69 1층",
+    "service": "주2회",
+    "note": "2월",
+    "frequency": "주2회"
+  },
+  {
+    "name": "건명약국",
+    "category": "보건의료",
+    "address": "서울시 중랑구 면목로 421",
+    "service": "월 1회(셋째주 수요일)",
+    "note": "2월부터 시작",
+    "frequency": "월 1회"
+  },
+  {
+    "name": "중랑구치매안심센터",
+    "category": "보건의료",
+    "address": "서울특별시 중랑구 신내동 665",
+    "service": "월1회 건강관리실 치매검사 분기별 사업팀 협조",
+    "note": "2016년 1월 협약",
+    "frequency": "월 1회"
+  },
+  {
+    "name": "녹색병원",
+    "category": "보건의료",
+    "address": "서울특별시 중랑구 사가정로49길 53",
+    "service": "무료진료(물리치료 처방), 무료건강강좌(비대면강의)",
+    "note": "2018년 10월부터 시작",
+    "frequency": "월 1회"
+  },
+  {
+    "name": "서울아산병원",
+    "category": "보건의료",
+    "address": "서울특별시 송파구 올림픽로43길 88",
+    "service": "무료건강강좌, 비대면 강의",
+    "note": "2020년부터 시작",
+    "frequency": "월 1회"
+  },
+  {
+    "name": "중랑구보건소",
+    "category": "보건의료",
+    "address": "서울 중랑구 봉화산로 179 중랑구청",
+    "service": "무료건강강좌",
+    "note": "2016 3월부터 업무체결",
+    "frequency": "월 1회"
+  },
+  {
+    "name": "희망을나누는사람들",
+    "category": "생활·의류",
+    "address": "서울특별시 금천구 벚꽃로 298 대륭포스트타워 6차 1310호",
+    "service": "월 1회 생필품 전달",
+    "note": "2020년 부터",
+    "frequency": "월 1회"
+  },
+  {
+    "name": "영원무역",
+    "category": "생활·의류",
+    "address": "서울특별시 중구 만리재로 159 영원프라자",
+    "service": "상,하반기 옷 전달",
+    "note": "2020년 부터",
+    "frequency": "상,하반기"
+  },
+  {
+    "name": "수제감자탕",
+    "category": "식품",
+    "address": "서울특별시 중랑구 봉우재로 50 202동 101호",
+    "service": "월1회 빵 전달",
+    "note": "5월부터",
+    "frequency": "월 1회"
+  },
+  {
+    "name": "장형준",
+    "category": "식품",
+    "address": "-",
+    "service": "월 1회",
+    "note": "장형준",
+    "frequency": "월 1회"
+  },
+  {
+    "name": "시골김치",
+    "category": "식품",
+    "address": "서울특별시 중랑구 중화2동 301-84",
+    "service": "비정기 후원(식혜등)",
+    "note": "2022년 8월부터 재가동",
+    "frequency": ""
+  },
+  {
+    "name": "메디컬수약국",
+    "category": "보건의료",
+    "address": "서울시 중랑구 면목로 430 메디컬수약국",
+    "service": "월1회파스",
+    "note": "2022년 11월부터",
+    "frequency": ""
+  },
+  {
+    "name": "서울의료원",
+    "category": "보건의료",
+    "address": "서울 중랑구 신내로 156 서울의료원",
+    "service": "무료건강강좌",
+    "note": "",
+    "frequency": "월 1회"
+  },
+  {
+    "name": "서울북부병원",
+    "category": "보건의료",
+    "address": "서울 중랑구 양원역로 38",
+    "service": "무료건강강좌",
+    "note": "",
+    "frequency": "월 1회"
+  },
+  {
+    "name": "강북연세병원",
+    "category": "보건의료",
+    "address": "서울 노원구 동일로 996",
+    "service": "무료건강강좌",
+    "note": "",
+    "frequency": "월 1회"
+  },
+  {
+    "name": "벨톤보청기",
+    "category": "보건의료",
+    "address": "서울 광진구 천호대로 549 G타워 14, 15층",
+    "service": "무료건강강좌",
+    "note": "",
+    "frequency": "월 1회"
+  },
+  {
+    "name": "더 마블링 망우목장",
+    "category": "식품",
+    "address": "용마산로 115길 8 1층 더마블링 망우목장",
+    "service": "월 1회 식품제공(8천원 단가)",
+    "note": "2023년 8월부터",
+    "frequency": "월1회"
+  },
+  {
+    "name": "파스텔",
+    "category": "생활·의류",
+    "address": "서울 중구 마장로 1길 28, 2층 236호",
+    "service": "옷전달(비정기)",
+    "note": "2023년 8월부터",
+    "frequency": "비정기"
+  },
+  {
+    "name": "강재용(개인후원)",
+    "category": "식품",
+    "address": "",
+    "service": "2개월1회 (쌀)",
+    "note": "2023년 12월부터",
+    "frequency": "월1회"
+  },
+  {
+    "name": "팔팔추어탕",
+    "category": "식품",
+    "address": "서울특별시 중랑구 상봉로 38",
+    "service": "주1회(추어탕 3그릇)",
+    "note": "2024년 1월부터",
+    "frequency": "주1회"
+  },
+  {
+    "name": "한촌설렁탕",
+    "category": "식품",
+    "address": "서울 중랑구 상봉로 39 MS빌딩 1층 한촌설렁탕",
+    "service": "설렁탕 10그릇",
+    "note": "2024년 1월부터",
+    "frequency": "월1회"
+  },
+  {
+    "name": "민현축산",
+    "category": "식품",
+    "address": "서울 중랑구 상봉로 11길 31 1층 민현축산",
+    "service": "한돈육류 10인분",
+    "note": "2024년 2월부터",
+    "frequency": "월1회"
+  },
+  {
+    "name": "소문난 황칠 순대국 왕족발",
+    "category": "식품",
+    "address": "서울 강남구 개포로 310 디에이치퍼스티어아이파크 122-105 서울 중랑구 겸재로 217 1층",
+    "service": "순대국 5인분",
+    "note": "2024년 3월부터",
+    "frequency": "월1회"
+  },
+  {
+    "name": "현방500소갈비살 면목점",
+    "category": "식품",
+    "address": "서울 중랑구 겸재로 215 1층",
+    "service": "생꽃등심 10팩",
+    "note": "2024년 3월부터",
+    "frequency": "월1회"
+  },
+  {
+    "name": "바다양푼이동태탕",
+    "category": "식품",
+    "address": "서울 동대문구 왕산로 211-1 1층",
+    "service": "동태탕 3인분",
+    "note": "2024년 3월부터",
+    "frequency": "월1회"
+  },
+  {
+    "name": "엄마해장국",
+    "category": "식품",
+    "address": "서울 중랑구 동일로109길 30 1층",
+    "service": "해장국 5인분",
+    "note": "2024년 4월부터",
+    "frequency": "월1회"
+  },
+  {
+    "name": "중앙약국",
+    "category": "보건의료",
+    "address": "서울 중랑구 신내로 128외 10필지 근린생활시설동1층 지하1층",
+    "service": "파스",
+    "note": "2024년 5월부터/2026년 2월 사업자번호 변경됨",
+    "frequency": "월1회"
+  },
+  {
+    "name": "소소한 얼",
+    "category": "식품",
+    "address": "서울 겸재로 50길 44-14 1층",
+    "service": "김",
+    "note": "2024년 5월부터",
+    "frequency": "월1회"
+  },
+  {
+    "name": "삼송빵집",
+    "category": "식품",
+    "address": "서울 중랑구 망우로 297 지하 1층(상봉동 상봉역)",
+    "service": "빵",
+    "note": "2024년 6월부터",
+    "frequency": "월1회"
+  },
+  {
+    "name": "전주김치반찬",
+    "category": "식품",
+    "address": "서울 중랑구 봉우재로14길 6, 1층",
+    "service": "반찬지원",
+    "note": "2025년 1월부터",
+    "frequency": "월1회"
+  },
+  {
+    "name": "쵸이스",
+    "category": "식품",
+    "address": "서울 중랑구 면목로66길 11, 1층 102호",
+    "service": "2개월 1회 음료 5잔",
+    "note": "2025년 1월부터",
+    "frequency": "비정기"
+  },
+  {
+    "name": "나나커피",
+    "category": "식품",
+    "address": "서울 중랑구 신내로 110 동성아파트 15동 1805호",
+    "service": "월1회 음료 12잔",
+    "note": "2025년 2월부터",
+    "frequency": "월1회"
+  },
+  {
+    "name": "참새방앗간",
+    "category": "식품",
+    "address": "서울 중랑구 겸재로50길 25 1층",
+    "service": "음식 6인분",
+    "note": "2025년 2월부터",
+    "frequency": "월1회"
+  },
+  {
+    "name": "돈킴명인감자탕",
+    "category": "식품",
+    "address": "서울 중랑구 동일로 704 1층",
+    "service": "음식 1인분",
+    "note": "2025년 4월부터",
+    "frequency": "월1회"
+  },
+  {
+    "name": "김진해(야쿠르트)",
+    "category": "식품",
+    "address": "서울 중랑구 동일로 156다길 6",
+    "service": "야쿠르트(소) 100개, 셋째주 화요일",
+    "note": "2025년 9월부터",
+    "frequency": "월1회"
+  },
+  {
+    "name": "더벤티 면목2동점",
+    "category": "식품",
+    "address": "서울 중랑구 면목동 180-45 삼영빌딩 1층",
+    "service": "월1회 음료6잔, 셋째주 화요일",
+    "note": "2025년 9월부터",
+    "frequency": "월1회"
+  },
+  {
+    "name": "수유리우동 동부시장점",
+    "category": "식품",
+    "address": "서울 중랑구 주알천로 10길 68",
+    "service": "김밥 10줄",
+    "note": "2025년 9월부터",
+    "frequency": "월1회"
+  },
+  {
+    "name": "참약국",
+    "category": "보건의료",
+    "address": "서울 중랑구 상봉중앙로1길 12 1층 7호",
+    "service": "파스 1.4만원",
+    "note": "2025년 9월부터",
+    "frequency": "월1회"
+  },
+  {
+    "name": "명가 닭강정",
+    "category": "식품",
+    "address": "중랑구 망우로32길 37, 106호",
+    "service": "치킨(또는 닭강정) 5마리",
+    "note": "2025년 10월부터",
+    "frequency": "월1회"
+  },
+  {
+    "name": "카페에서",
+    "category": "식품",
+    "address": "",
+    "service": "월 2회 음료 4잔씩",
+    "note": "2025년 10월부터",
+    "frequency": "월1회"
+  },
+  {
+    "name": "동부순대국",
+    "category": "식품",
+    "address": "중랑구 봉우재로13길 7, 동부순대국",
+    "service": "월 1회 순대국 3인분, 셋째주 목요일",
+    "note": "2025년 12월부터",
+    "frequency": "월1회"
+  },
+  {
+    "name": "소문난순대국왕족발",
+    "category": "식품",
+    "address": "중랑구 면목동 185-103번지",
+    "service": "월 1회 족발(4인) 셋째주 목요일3시이후",
+    "note": "2026년 2월부터(2월만 26일 나눔)",
+    "frequency": "월1회"
+  }
+]

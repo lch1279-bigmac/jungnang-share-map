@@ -44,6 +44,6 @@ export function ShopCard({
         <MapPin className="mt-0.5 size-3.5 shrink-0" />
         <span className="line-clamp-1">{shop.address || "주소 미등록"}</span>
       </p>
-    </motion.button>
+    </button>
   );
 }

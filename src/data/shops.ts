@@ -25,11 +25,27 @@ const dongOrder = ["면목동", "상봉동", "중화동", "신내동", "망우�
 export const dongs: string[] = dongOrder.filter((d) => shops.some((s) => s.dong === d));
 
 
-export function mapEmbedUrl(address: string) {
-  const q = encodeURIComponent(address.includes("중랑") || address.includes("서울") ? address : `서울 중랑구 ${address}`);
-  return `https://maps.google.com/maps?q=${q}&z=16&hl=ko&output=embed`;
+// 가게 이름을 우선으로 한 검색어 (주소는 정확도 보조용)
+function shopQuery(shop: Shop) {
+  const parts = [shop.name];
+  if (shop.dong && shop.dong !== "주소 미등록") parts.push(shop.dong);
+  parts.push("서울 중랑구");
+  return parts.join(" ");
 }
 
-export function mapLinkUrl(address: string) {
-  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+export function mapEmbedUrl(shop: Shop) {
+  const q = encodeURIComponent(shopQuery(shop));
+  return `https://maps.google.com/maps?q=${q}&z=17&hl=ko&output=embed`;
+}
+
+export function mapLinkUrl(shop: Shop) {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(shopQuery(shop))}`;
+}
+
+export function kakaoMapUrl(shop: Shop) {
+  return `https://map.kakao.com/?q=${encodeURIComponent(shopQuery(shop))}`;
+}
+
+export function naverMapUrl(shop: Shop) {
+  return `https://map.naver.com/p/search/${encodeURIComponent(shopQuery(shop))}`;
 }

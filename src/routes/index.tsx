@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Search, HeartHandshake } from "lucide-react";
-import { shops, categories, type Category, type Shop } from "@/data/shops";
+import { Search, HeartHandshake, MapPinned } from "lucide-react";
+import { shops, categories, dongs, type Category, type Shop } from "@/data/shops";
 import { ShopCard } from "@/components/ShopCard";
 import { MapPanel } from "@/components/MapPanel";
 

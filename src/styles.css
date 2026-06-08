@@ -143,7 +143,7 @@
   --sidebar-ring: oklch(0.551 0.027 264.364);
 }
 
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
+
 
 @layer base {
   * {

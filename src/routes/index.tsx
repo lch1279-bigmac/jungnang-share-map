@@ -28,12 +28,14 @@ export const Route = createFileRoute("/")({
 function Index() {
   const [query, setQuery] = useState("");
   const [cat, setCat] = useState<Category | "전체">("전체");
+  const [dong, setDong] = useState<string | "전체">("전체");
   const [selected, setSelected] = useState<Shop | null>(null);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return shops.filter((s) => {
       if (cat !== "전체" && s.category !== cat) return false;
+      if (dong !== "전체" && s.dong !== dong) return false;
       if (!q) return true;
       return (
         s.name.toLowerCase().includes(q) ||
@@ -41,7 +43,7 @@ function Index() {
         s.service.toLowerCase().includes(q)
       );
     });
-  }, [query, cat]);
+  }, [query, cat, dong]);
 
   return (
     <div className="min-h-screen bg-background">

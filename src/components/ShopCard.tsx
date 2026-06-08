@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import type { Shop } from "@/data/shops";
 import { MapPin } from "lucide-react";
 
@@ -18,14 +17,12 @@ export function ShopCard({
   onSelect: () => void;
 }) {
   return (
-    <motion.button
-      layout
+    <button
       onClick={onSelect}
-      whileTap={{ scale: 0.98 }}
-      className={`w-full text-left rounded-2xl border bg-card p-4 transition-all ${
+      className={`w-full text-left rounded-2xl border bg-card p-4 transition-colors active:scale-[0.99] ${
         active
           ? "border-primary ring-2 ring-primary/30 shadow-[var(--shadow-soft)]"
-          : "border-border hover:border-primary/40 shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-soft)]"
+          : "border-border hover:border-primary/40 shadow-[var(--shadow-card)]"
       }`}
     >
       <div className="flex items-start justify-between gap-2">
@@ -47,6 +44,6 @@ export function ShopCard({
         <MapPin className="mt-0.5 size-3.5 shrink-0" />
         <span className="line-clamp-1">{shop.address || "주소 미등록"}</span>
       </p>
-    </motion.button>
+    </button>
   );
 }

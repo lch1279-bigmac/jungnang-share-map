@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Search, HeartHandshake } from "lucide-react";
-import { shops, categories, type Category, type Shop } from "@/data/shops";
+import { Search, HeartHandshake, MapPinned } from "lucide-react";
+import { shops, categories, dongs, type Category, type Shop } from "@/data/shops";
 import { ShopCard } from "@/components/ShopCard";
 import { MapPanel } from "@/components/MapPanel";
 
@@ -28,12 +28,14 @@ export const Route = createFileRoute("/")({
 function Index() {
   const [query, setQuery] = useState("");
   const [cat, setCat] = useState<Category | "전체">("전체");
+  const [dong, setDong] = useState<string | "전체">("전체");
   const [selected, setSelected] = useState<Shop | null>(null);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return shops.filter((s) => {
       if (cat !== "전체" && s.category !== cat) return false;
+      if (dong !== "전체" && s.dong !== dong) return false;
       if (!q) return true;
       return (
         s.name.toLowerCase().includes(q) ||
@@ -41,7 +43,7 @@ function Index() {
         s.service.toLowerCase().includes(q)
       );
     });
-  }, [query, cat]);
+  }, [query, cat, dong]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -92,25 +94,44 @@ function Index() {
             })}
           </div>
 
+          <div>
+            <p className="mb-2 flex items-center gap-1 text-xs font-semibold text-muted-foreground">
+              <MapPinned className="size-3.5" /> 동네별로 보기
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <FilterChip label="전체 동네" active={dong === "전체"} onClick={() => setDong("전체")} />
+              {dongs.map((d) => {
+                const count = shops.filter((s) => s.dong === d).length;
+                return (
+                  <FilterChip
+                    key={d}
+                    label={`${d} ${count}`}
+                    active={dong === d}
+                    onClick={() => setDong(d)}
+                  />
+                );
+              })}
+            </div>
+          </div>
+
           <p className="text-xs text-muted-foreground">{filtered.length}개 가게</p>
 
-          <motion.div layout className="flex flex-col gap-2.5">
-            <AnimatePresence mode="popLayout">
-              {filtered.map((shop) => (
-                <ShopCard
-                  key={shop.name + shop.address}
-                  shop={shop}
-                  active={selected?.name === shop.name}
-                  onSelect={() => setSelected(shop)}
-                />
-              ))}
-            </AnimatePresence>
+          <div className="flex flex-col gap-2.5">
+            {filtered.map((shop) => (
+              <ShopCard
+                key={shop.name + shop.address}
+                shop={shop}
+                active={selected?.name === shop.name}
+                onSelect={() => setSelected(shop)}
+              />
+            ))}
             {filtered.length === 0 && (
               <p className="py-10 text-center text-sm text-muted-foreground">
                 검색 결과가 없어요.
               </p>
             )}
-          </motion.div>
+          </div>
+
         </section>
 
         {/* Map column (desktop) */}

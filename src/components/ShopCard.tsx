@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import type { Shop } from "@/data/shops";
 import { MapPin } from "lucide-react";
 

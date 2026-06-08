@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { ExternalLink, MapPin, X } from "lucide-react";
 import type { Shop } from "@/data/shops";
-import { mapEmbedUrl, mapLinkUrl } from "@/data/shops";
+import { mapEmbedUrl, mapLinkUrl, kakaoMapUrl, naverMapUrl } from "@/data/shops";
 
 export function MapPanel({ shop, onClose }: { shop: Shop; onClose: () => void }) {
   return (

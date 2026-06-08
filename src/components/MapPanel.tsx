@@ -44,32 +44,42 @@ export function MapPanel({ shop, onClose }: { shop: Shop; onClose: () => void })
       </div>
 
       <div className="relative flex-1 min-h-[280px] bg-muted">
-        {shop.address ? (
-          <iframe
-            key={shop.name}
-            title={`${shop.name} 위치`}
-            src={mapEmbedUrl(shop.address)}
-            className="absolute inset-0 size-full border-0"
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          />
-        ) : (
-          <div className="flex size-full items-center justify-center text-sm text-muted-foreground">
-            등록된 주소가 없어요
-          </div>
-        )}
+        <iframe
+          key={shop.name}
+          title={`${shop.name} 위치`}
+          src={mapEmbedUrl(shop)}
+          className="absolute inset-0 size-full border-0"
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        />
       </div>
 
-      {shop.address && (
+      <div className="grid grid-cols-3 border-t border-border">
         <a
-          href={mapLinkUrl(shop.address)}
+          href={mapLinkUrl(shop)}
           target="_blank"
           rel="noreferrer"
-          className="flex items-center justify-center gap-2 bg-primary py-3.5 font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+          className="flex items-center justify-center gap-1.5 bg-primary py-3.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
         >
-          구글지도 앱에서 길찾기 <ExternalLink className="size-4" />
+          구글지도 <ExternalLink className="size-3.5" />
         </a>
-      )}
+        <a
+          href={kakaoMapUrl(shop)}
+          target="_blank"
+          rel="noreferrer"
+          className="flex items-center justify-center gap-1.5 border-l border-border bg-[#FEE500] py-3.5 text-sm font-semibold text-[#3C1E1E] transition-opacity hover:opacity-90"
+        >
+          카카오지도 <ExternalLink className="size-3.5" />
+        </a>
+        <a
+          href={naverMapUrl(shop)}
+          target="_blank"
+          rel="noreferrer"
+          className="flex items-center justify-center gap-1.5 border-l border-border bg-[#03C75A] py-3.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+        >
+          네이버지도 <ExternalLink className="size-3.5" />
+        </a>
+      </div>
     </motion.div>
   );
 }

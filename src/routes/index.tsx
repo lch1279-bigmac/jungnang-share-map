@@ -15,10 +15,10 @@ export const Route = createFileRoute("/")({
         content:
           "서울 중랑구의 나눔가게를 식품·생활·의류·보건의료로 살펴보고, 가게를 누르면 구글지도로 위치를 확인할 수 있는 모바일 친화 지도 앱.",
       },
-      { property: "og:title", content: "중랑구 나눔가게 지도" },
+      { property: "og:title", content: "중랑구 나눔가게 지도 — 우리동네 나눔가게" },
       {
         property: "og:description",
-        content: "중랑구 나눔가게 100여 곳을 카테고리별로 살펴보고 지도로 위치를 확인하세요.",
+        content: "서울 중랑구의 나눔가게를 식품·생활·의류·보건의료로 살펴보고, 가게를 누르면 구글지도로 위치를 확인할 수 있는 모바일 친화 지도 앱.",
       },
     ],
   }),

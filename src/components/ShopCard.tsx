@@ -49,9 +49,9 @@ export function ShopCard({
             {shop.category}
           </span>
         </div>
-        {shop.service && (
-          <p className="mt-1.5 text-sm text-muted-foreground line-clamp-1">
-            나눔: {shop.service}
+        {shop.intro && (
+          <p className="mt-1.5 text-sm text-muted-foreground line-clamp-2">
+            {shop.intro}
           </p>
         )}
         <p className="mt-2 flex items-start gap-1 text-xs text-muted-foreground">

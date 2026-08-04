@@ -9,9 +9,8 @@ const empty: Shop = {
   name: "",
   category: "식품",
   address: "",
-  service: "",
+  intro: "",
   note: "",
-  frequency: "",
   dong: "",
 };
 
@@ -211,33 +210,24 @@ export function ShopFormModal({
             )}
           </Field>
 
-          <Field label="나눔 내용">
-            <input
-              value={form.service}
-              onChange={(e) => set("service", e.target.value)}
-              className={inputClass}
-              placeholder="예: 떡 지원"
+          <Field label="소개" hint="가게를 소개하는 글 (목록·지도에 표시)">
+            <textarea
+              value={form.intro}
+              onChange={(e) => set("intro", e.target.value)}
+              rows={4}
+              className={`${inputClass} resize-y`}
+              placeholder="예: 따뜻한 한 끼를 나누는 나눔가게예요. 매달 정성껏 떡을 나눠 주세요."
             />
           </Field>
 
-          <div className="grid grid-cols-2 gap-4">
-            <Field label="빈도">
-              <input
-                value={form.frequency}
-                onChange={(e) => set("frequency", e.target.value)}
-                className={inputClass}
-                placeholder="예: 월1회"
-              />
-            </Field>
-            <Field label="비고">
-              <input
-                value={form.note}
-                onChange={(e) => set("note", e.target.value)}
-                className={inputClass}
-                placeholder="선택 입력"
-              />
-            </Field>
-          </div>
+          <Field label="비고" hint="관리용 메모 (공개되지 않음)">
+            <input
+              value={form.note}
+              onChange={(e) => set("note", e.target.value)}
+              className={inputClass}
+              placeholder="선택 입력"
+            />
+          </Field>
         </div>
 
         <div className="flex justify-end gap-2 border-t border-border px-5 py-4">

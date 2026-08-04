@@ -28,20 +28,14 @@ export function MapPanel({ shop, onClose }: { shop: Shop; onClose: () => void })
         </button>
       </div>
 
-      <div className="grid gap-3 px-5 py-4 sm:grid-cols-2">
-        {shop.service && (
-          <div className="rounded-2xl bg-secondary/60 p-3">
-            <p className="text-xs font-semibold text-secondary-foreground">나눔 내용</p>
-            <p className="mt-0.5 text-sm text-card-foreground">{shop.service}</p>
+      {shop.intro && (
+        <div className="px-5 py-4">
+          <div className="rounded-2xl bg-secondary/60 p-3.5">
+            <p className="text-xs font-semibold text-secondary-foreground">소개</p>
+            <p className="mt-1 text-sm leading-relaxed text-card-foreground">{shop.intro}</p>
           </div>
-        )}
-        {shop.frequency && (
-          <div className="rounded-2xl bg-secondary/60 p-3">
-            <p className="text-xs font-semibold text-secondary-foreground">빈도</p>
-            <p className="mt-0.5 text-sm text-card-foreground">{shop.frequency}</p>
-          </div>
-        )}
-      </div>
+        </div>
+      )}
 
       <div className="relative flex-1 min-h-[280px] bg-muted">
         <iframe

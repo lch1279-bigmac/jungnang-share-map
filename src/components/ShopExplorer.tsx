@@ -68,7 +68,7 @@ export function ShopExplorer({
       return (
         s.name.toLowerCase().includes(q) ||
         s.address.toLowerCase().includes(q) ||
-        s.service.toLowerCase().includes(q)
+        s.intro.toLowerCase().includes(q)
       );
     });
   }, [shops, query, cat, dong]);
@@ -164,7 +164,7 @@ export function ShopExplorer({
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="가게 이름·주소·나눔 내용 검색"
+              placeholder="가게 이름·주소·소개 검색"
               className="w-full rounded-2xl border border-border bg-card py-3 pl-10 pr-4 text-sm outline-none transition-shadow placeholder:text-muted-foreground focus:ring-2 focus:ring-primary/30"
             />
           </div>

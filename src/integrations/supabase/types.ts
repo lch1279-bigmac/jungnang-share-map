@@ -20,9 +20,8 @@ export type Database = {
           name: string
           category: string
           address: string
-          service: string
+          intro: string
           note: string
-          frequency: string
           dong: string
           sort_order: number
           created_at: string
@@ -33,9 +32,8 @@ export type Database = {
           name: string
           category?: string
           address?: string
-          service?: string
+          intro?: string
           note?: string
-          frequency?: string
           dong?: string
           sort_order?: number
           created_at?: string
@@ -46,9 +44,8 @@ export type Database = {
           name?: string
           category?: string
           address?: string
-          service?: string
+          intro?: string
           note?: string
-          frequency?: string
           dong?: string
           sort_order?: number
           created_at?: string

@@ -7,7 +7,7 @@ export interface ShopRecord extends Shop {
   id: string;
 }
 
-const SELECT_COLS = "id,name,category,address,service,note,frequency,dong,sort_order";
+const SELECT_COLS = "id,name,category,address,intro,note,dong,sort_order";
 export const SHOPS_QUERY_KEY = ["shops"] as const;
 
 async function fetchShops(): Promise<ShopRecord[]> {
@@ -22,9 +22,8 @@ async function fetchShops(): Promise<ShopRecord[]> {
     name: r.name,
     category: r.category as Category,
     address: r.address ?? "",
-    service: r.service ?? "",
+    intro: r.intro ?? "",
     note: r.note ?? "",
-    frequency: r.frequency ?? "",
     dong: r.dong ?? "",
   }));
 }

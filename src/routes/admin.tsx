@@ -9,7 +9,7 @@ import { ShopExplorer } from "@/components/ShopExplorer";
 export const Route = createFileRoute("/admin")({
   head: () => ({
     meta: [
-      { title: "관리자 — 우리동네 나눔가게 지도" },
+      { title: "관리자 — 우리동네 나눔가게 및 아름다운 이웃 지도" },
       // 검색엔진에 노출되지 않도록
       { name: "robots", content: "noindex, nofollow" },
     ],
@@ -91,7 +91,7 @@ function LoginForm() {
           관리자 로그인
         </h1>
         <p className="mt-1 text-center text-sm text-muted-foreground">
-          우리동네 나눔가게 지도 관리
+          우리동네 나눔가게 및 아름다운 이웃 지도 관리
         </p>
 
         <div className="mt-6 flex flex-col gap-3">

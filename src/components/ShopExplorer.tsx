@@ -59,6 +59,20 @@ export function ShopExplorer({
     [shops],
   );
 
+  // DB 기준일 = 가게들의 최종 수정시각 중 가장 최근 (수정·추가 시 자동 갱신)
+  const asOfDate = useMemo(() => {
+    if (shops.length === 0) return null;
+    const latest = shops.reduce(
+      (max, s) => (s.updatedAt > max ? s.updatedAt : max),
+      shops[0].updatedAt,
+    );
+    const d = new Date(latest);
+    if (Number.isNaN(d.getTime())) return null;
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(
+      d.getDate(),
+    ).padStart(2, "0")}`;
+  }, [shops]);
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return shops.filter((s) => {
@@ -123,7 +137,7 @@ export function ShopExplorer({
           </div>
           <div className="min-w-0 flex-1">
             <h1 className="flex items-center gap-1.5 truncate text-lg font-extrabold leading-tight text-foreground">
-              우리동네 나눔가게 지도
+              우리동네 나눔가게 및 아름다운 이웃 지도
               {admin && (
                 <span className="inline-flex items-center gap-1 rounded-full bg-primary/12 px-2 py-0.5 text-xs font-bold text-primary">
                   <ShieldCheck className="size-3" /> 관리자
@@ -204,7 +218,12 @@ export function ShopExplorer({
             </div>
           </div>
 
-          <p className="text-xs text-muted-foreground">{filtered.length}개 가게</p>
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-xs text-muted-foreground">{filtered.length}개 가게</p>
+            {asOfDate && (
+              <p className="text-xs text-muted-foreground">DB 기준일 {asOfDate}</p>
+            )}
+          </div>
 
           {/* 로딩 / 에러 / 목록 */}
           {isLoading ? (

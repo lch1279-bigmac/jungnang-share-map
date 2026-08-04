@@ -50,7 +50,7 @@ export function ShopFormModal({
 
   useEffect(() => {
     if (shop) {
-      const { id: _id, ...rest } = shop;
+      const { id: _id, updatedAt: _updatedAt, ...rest } = shop;
       setForm(rest);
     } else {
       setForm(empty);

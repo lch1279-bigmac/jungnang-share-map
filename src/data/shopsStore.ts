@@ -2,12 +2,13 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { Category, Shop } from "./shops";
 
-// DB에서 온 가게 레코드 (id 포함)
+// DB에서 온 가게 레코드 (id, 최종수정시각 포함)
 export interface ShopRecord extends Shop {
   id: string;
+  updatedAt: string;
 }
 
-const SELECT_COLS = "id,name,category,address,intro,note,dong,sort_order";
+const SELECT_COLS = "id,name,category,address,intro,note,dong,sort_order,updated_at";
 export const SHOPS_QUERY_KEY = ["shops"] as const;
 
 async function fetchShops(): Promise<ShopRecord[]> {
@@ -25,6 +26,7 @@ async function fetchShops(): Promise<ShopRecord[]> {
     intro: r.intro ?? "",
     note: r.note ?? "",
     dong: r.dong ?? "",
+    updatedAt: r.updated_at,
   }));
 }
 

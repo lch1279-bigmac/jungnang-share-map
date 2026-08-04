@@ -5,12 +5,9 @@ import { mapEmbedUrl, mapLinkUrl, kakaoMapUrl, naverMapUrl } from "@/data/shops"
 
 export function MapPanel({
   shop,
-  ambiguous = false,
   onClose,
 }: {
   shop: Shop;
-  /** 같은 상호명이 여러 개라 주소로 구분이 필요한 경우 */
-  ambiguous?: boolean;
   onClose: () => void;
 }) {
   return (
@@ -50,7 +47,7 @@ export function MapPanel({
         <iframe
           key={shop.name}
           title={`${shop.name} 위치`}
-          src={mapEmbedUrl(shop, ambiguous)}
+          src={mapEmbedUrl(shop)}
           className="absolute inset-0 size-full border-0"
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
@@ -59,7 +56,7 @@ export function MapPanel({
 
       <div className="grid grid-cols-3 border-t border-border">
         <a
-          href={mapLinkUrl(shop, ambiguous)}
+          href={mapLinkUrl(shop)}
           target="_blank"
           rel="noreferrer"
           className="flex items-center justify-center gap-1.5 bg-primary py-3.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
@@ -67,7 +64,7 @@ export function MapPanel({
           구글지도 <ExternalLink className="size-3.5" />
         </a>
         <a
-          href={kakaoMapUrl(shop, ambiguous)}
+          href={kakaoMapUrl(shop)}
           target="_blank"
           rel="noreferrer"
           className="flex items-center justify-center gap-1.5 border-l border-border bg-[#FEE500] py-3.5 text-sm font-semibold text-[#3C1E1E] transition-opacity hover:opacity-90"
@@ -75,7 +72,7 @@ export function MapPanel({
           카카오지도 <ExternalLink className="size-3.5" />
         </a>
         <a
-          href={naverMapUrl(shop, ambiguous)}
+          href={naverMapUrl(shop)}
           target="_blank"
           rel="noreferrer"
           className="flex items-center justify-center gap-1.5 border-l border-border bg-[#03C75A] py-3.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"

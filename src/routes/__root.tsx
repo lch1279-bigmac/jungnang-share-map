@@ -83,12 +83,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: "우리동네 나눔가게 및 아름다운 이웃 지도" },
       { property: "og:description", content: "서울 중랑구의 나눔가게를 식품·생활·의류·보건의료로 살펴보고, 가게를 누르면 구글지도로 위치를 확인할 수 있는 모바일 친화 지도 앱." },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
       { name: "twitter:title", content: "우리동네 나눔가게 및 아름다운 이웃 지도" },
       { name: "twitter:description", content: "서울 중랑구의 나눔가게를 식품·생활·의류·보건의료로 살펴보고, 가게를 누르면 구글지도로 위치를 확인할 수 있는 모바일 친화 지도 앱." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/y7opVscVc0XFTo9WPkxkSbPuZcw1/social-images/social-1785831303284-social-image.webp" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/y7opVscVc0XFTo9WPkxkSbPuZcw1/social-images/social-1785831303284-social-image.webp" },
+      // 카카오톡·페이스북 등은 webp OG 이미지를 지원하지 않아, JPG로 변환해 자체 호스팅(public/og-image.jpg)
+      { property: "og:image", content: "https://jungnang-share-map.lovable.app/og-image.jpg" },
+      { name: "twitter:image", content: "https://jungnang-share-map.lovable.app/og-image.jpg" },
     ],
     links: [
       {

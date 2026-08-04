@@ -3,7 +3,16 @@ import { ExternalLink, MapPin, X } from "lucide-react";
 import type { Shop } from "@/data/shops";
 import { mapEmbedUrl, mapLinkUrl, kakaoMapUrl, naverMapUrl } from "@/data/shops";
 
-export function MapPanel({ shop, onClose }: { shop: Shop; onClose: () => void }) {
+export function MapPanel({
+  shop,
+  ambiguous = false,
+  onClose,
+}: {
+  shop: Shop;
+  /** 같은 상호명이 여러 개라 주소로 구분이 필요한 경우 */
+  ambiguous?: boolean;
+  onClose: () => void;
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -41,7 +50,7 @@ export function MapPanel({ shop, onClose }: { shop: Shop; onClose: () => void })
         <iframe
           key={shop.name}
           title={`${shop.name} 위치`}
-          src={mapEmbedUrl(shop)}
+          src={mapEmbedUrl(shop, ambiguous)}
           className="absolute inset-0 size-full border-0"
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
@@ -50,7 +59,7 @@ export function MapPanel({ shop, onClose }: { shop: Shop; onClose: () => void })
 
       <div className="grid grid-cols-3 border-t border-border">
         <a
-          href={mapLinkUrl(shop)}
+          href={mapLinkUrl(shop, ambiguous)}
           target="_blank"
           rel="noreferrer"
           className="flex items-center justify-center gap-1.5 bg-primary py-3.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
@@ -58,7 +67,7 @@ export function MapPanel({ shop, onClose }: { shop: Shop; onClose: () => void })
           구글지도 <ExternalLink className="size-3.5" />
         </a>
         <a
-          href={kakaoMapUrl(shop)}
+          href={kakaoMapUrl(shop, ambiguous)}
           target="_blank"
           rel="noreferrer"
           className="flex items-center justify-center gap-1.5 border-l border-border bg-[#FEE500] py-3.5 text-sm font-semibold text-[#3C1E1E] transition-opacity hover:opacity-90"
@@ -66,7 +75,7 @@ export function MapPanel({ shop, onClose }: { shop: Shop; onClose: () => void })
           카카오지도 <ExternalLink className="size-3.5" />
         </a>
         <a
-          href={naverMapUrl(shop)}
+          href={naverMapUrl(shop, ambiguous)}
           target="_blank"
           rel="noreferrer"
           className="flex items-center justify-center gap-1.5 border-l border-border bg-[#03C75A] py-3.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"

@@ -61,6 +61,13 @@ export function ShopExplorer({
     [shops],
   );
 
+  // 같은 상호명이 둘 이상인 이름들 → 지도 검색 시 주소로 구분
+  const duplicateNames = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const s of shops) counts.set(s.name, (counts.get(s.name) ?? 0) + 1);
+    return new Set([...counts].filter(([, n]) => n > 1).map(([name]) => name));
+  }, [shops]);
+
   // DB 기준일 = 가게들의 최종 수정시각 중 가장 최근 (수정·추가 시 자동 갱신)
   const asOfDate = useMemo(() => {
     if (shops.length === 0) return null;
@@ -278,7 +285,11 @@ export function ShopExplorer({
         <section className="hidden lg:block">
           <div className="sticky top-24 h-[calc(100vh-7.5rem)]">
             {selected ? (
-              <MapPanel shop={selected} onClose={() => setSelectedId(null)} />
+              <MapPanel
+                shop={selected}
+                ambiguous={duplicateNames.has(selected.name)}
+                onClose={() => setSelectedId(null)}
+              />
             ) : (
               <EmptyMap />
             )}
@@ -303,7 +314,11 @@ export function ShopExplorer({
               transition={{ type: "spring", damping: 30, stiffness: 320 }}
               className="absolute inset-x-0 bottom-0 top-12 p-3"
             >
-              <MapPanel shop={selected} onClose={() => setSelectedId(null)} />
+              <MapPanel
+                shop={selected}
+                ambiguous={duplicateNames.has(selected.name)}
+                onClose={() => setSelectedId(null)}
+              />
             </motion.div>
           </motion.div>
         )}

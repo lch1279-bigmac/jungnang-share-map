@@ -22,30 +22,32 @@ export const categories: { key: Category; label: string; emoji: string }[] = [
 // 동 정렬 순서 (면목동 우선 / 미등록·구외는 뒤로). 실제 동 목록은 데이터에서 계산.
 export const dongOrder = ["면목동", "상봉동", "중화동", "신내동", "망우동", "묵동", "중랑구 외", "주소 미등록"];
 
-// 지도 검색어: 1) 상호명 2) 주소 매칭 (상호명 + 실제 주소)
-function shopQuery(shop: Shop) {
+// 지도 검색어: 기본은 상호명만. 같은 상호명이 여러 개일 때만(ambiguous)
+// 주소를 덧붙여 구분한다.
+function shopQuery(shop: Shop, ambiguous = false) {
   const parts = [shop.name];
-  const addr = shop.address?.trim();
-  if (addr && addr !== "-" && addr !== "주소 미등록") parts.push(addr);
-  else parts.push("서울 중랑구");
+  if (ambiguous) {
+    const addr = shop.address?.trim();
+    if (addr && addr !== "-" && addr !== "주소 미등록") parts.push(addr);
+  }
   return parts.join(" ");
 }
 
-export function mapEmbedUrl(shop: Shop) {
-  const q = encodeURIComponent(shopQuery(shop));
+export function mapEmbedUrl(shop: Shop, ambiguous = false) {
+  const q = encodeURIComponent(shopQuery(shop, ambiguous));
   return `https://maps.google.com/maps?q=${q}&z=17&hl=ko&output=embed`;
 }
 
-export function mapLinkUrl(shop: Shop) {
+export function mapLinkUrl(shop: Shop, ambiguous = false) {
   // /maps/search/?api=1 형식은 임베드/프리뷰 맥락에서 리다이렉트 중
   // ERR_BLOCKED_BY_RESPONSE로 차단되는 경우가 있어, 바로 핀으로 여는 maps?q= 사용.
-  return `https://www.google.com/maps?q=${encodeURIComponent(shopQuery(shop))}`;
+  return `https://www.google.com/maps?q=${encodeURIComponent(shopQuery(shop, ambiguous))}`;
 }
 
-export function kakaoMapUrl(shop: Shop) {
-  return `https://map.kakao.com/?q=${encodeURIComponent(shopQuery(shop))}`;
+export function kakaoMapUrl(shop: Shop, ambiguous = false) {
+  return `https://map.kakao.com/?q=${encodeURIComponent(shopQuery(shop, ambiguous))}`;
 }
 
-export function naverMapUrl(shop: Shop) {
-  return `https://map.naver.com/p/search/${encodeURIComponent(shopQuery(shop))}`;
+export function naverMapUrl(shop: Shop, ambiguous = false) {
+  return `https://map.naver.com/p/search/${encodeURIComponent(shopQuery(shop, ambiguous))}`;
 }

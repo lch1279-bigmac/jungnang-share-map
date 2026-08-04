@@ -1,13 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ShieldCheck, Lock } from "lucide-react";
+import { ShieldCheck, Lock, Loader2 } from "lucide-react";
+import type { Session } from "@supabase/supabase-js";
+import { supabase } from "@/integrations/supabase/client";
 import { ShopExplorer } from "@/components/ShopExplorer";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
     meta: [
-      { title: "관리자 — 중랑구 나눔가게 지도" },
+      { title: "관리자 — 우리동네 나눔가게 지도" },
       // 검색엔진에 노출되지 않도록
       { name: "robots", content: "noindex, nofollow" },
     ],
@@ -15,64 +17,60 @@ export const Route = createFileRoute("/admin")({
   component: AdminPage,
 });
 
-// ⚠️ 클라이언트 사이드 소프트 잠금: 백엔드가 없어 자격증명이 앱 코드에 담깁니다.
-// 일반 주민의 접근을 막기엔 충분하지만, 개발자도구를 열 줄 아는 사람은 우회할 수 있습니다.
-// 진짜 접근 제어가 필요하면 Supabase Auth 등 서버 인증으로 교체해야 합니다.
-const ADMIN_ID = "admin";
-const ADMIN_PW = "ers1788**";
-const SESSION_KEY = "jnsm.admin.session";
-
-function readSession(): boolean {
-  if (typeof sessionStorage === "undefined") return false;
-  return sessionStorage.getItem(SESSION_KEY) === "1";
-}
-
 function AdminPage() {
-  const [authed, setAuthed] = useState(false);
+  const [session, setSession] = useState<Session | null>(null);
+  const [checking, setChecking] = useState(true);
 
-  // sessionStorage는 클라이언트에서만 접근 가능 → 마운트 후 반영 (SSR 안전)
   useEffect(() => {
-    setAuthed(readSession());
+    supabase.auth.getSession().then(({ data }) => {
+      setSession(data.session);
+      setChecking(false);
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, s) => {
+      setSession(s);
+    });
+    return () => sub.subscription.unsubscribe();
   }, []);
 
-  function handleLogin() {
-    try {
-      sessionStorage.setItem(SESSION_KEY, "1");
-    } catch {
-      // 저장 실패해도 이번 세션 동안은 로그인 유지
-    }
-    setAuthed(true);
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    setSession(null);
   }
 
-  function handleLogout() {
-    try {
-      sessionStorage.removeItem(SESSION_KEY);
-    } catch {
-      // ignore
-    }
-    setAuthed(false);
+  if (checking) {
+    return (
+      <div className="flex min-h-screen items-center justify-center gap-2 bg-background text-sm text-muted-foreground">
+        <Loader2 className="size-4 animate-spin" /> 확인 중…
+      </div>
+    );
   }
 
-  if (!authed) {
-    return <LoginForm onSuccess={handleLogin} />;
+  if (!session) {
+    return <LoginForm />;
   }
 
   return <ShopExplorer admin onLogout={handleLogout} />;
 }
 
-function LoginForm({ onSuccess }: { onSuccess: () => void }) {
-  const [id, setId] = useState("");
+function LoginForm() {
+  const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
-  function submit(e: React.FormEvent) {
+  async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (id === ADMIN_ID && pw === ADMIN_PW) {
-      setError(false);
-      onSuccess();
-    } else {
-      setError(true);
+    setSubmitting(true);
+    setError(null);
+    const { error } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
+      password: pw,
+    });
+    setSubmitting(false);
+    if (error) {
+      setError("이메일 또는 비밀번호가 올바르지 않습니다.");
     }
+    // 성공 시 onAuthStateChange가 세션을 갱신해 관리자 화면으로 전환됨
   }
 
   return (
@@ -93,22 +91,23 @@ function LoginForm({ onSuccess }: { onSuccess: () => void }) {
           관리자 로그인
         </h1>
         <p className="mt-1 text-center text-sm text-muted-foreground">
-          중랑구 나눔가게 지도 관리
+          우리동네 나눔가게 지도 관리
         </p>
 
         <div className="mt-6 flex flex-col gap-3">
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-semibold text-muted-foreground">아이디</span>
+            <span className="text-xs font-semibold text-muted-foreground">이메일</span>
             <input
-              value={id}
+              type="email"
+              value={email}
               onChange={(e) => {
-                setId(e.target.value);
-                setError(false);
+                setEmail(e.target.value);
+                setError(null);
               }}
               autoFocus
               autoComplete="username"
               className={inputClass}
-              placeholder="admin"
+              placeholder="admin@example.com"
             />
           </label>
           <label className="flex flex-col gap-1.5">
@@ -118,7 +117,7 @@ function LoginForm({ onSuccess }: { onSuccess: () => void }) {
               value={pw}
               onChange={(e) => {
                 setPw(e.target.value);
-                setError(false);
+                setError(null);
               }}
               autoComplete="current-password"
               className={inputClass}
@@ -129,15 +128,17 @@ function LoginForm({ onSuccess }: { onSuccess: () => void }) {
 
         {error && (
           <p className="mt-3 rounded-xl bg-destructive/10 px-3 py-2 text-center text-xs font-semibold text-destructive">
-            아이디 또는 비밀번호가 올바르지 않습니다.
+            {error}
           </p>
         )}
 
         <button
           type="submit"
-          className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+          disabled={submitting || !email.trim() || !pw}
+          className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
         >
-          <Lock className="size-4" /> 로그인
+          {submitting ? <Loader2 className="size-4 animate-spin" /> : <Lock className="size-4" />}
+          로그인
         </button>
       </motion.form>
     </div>

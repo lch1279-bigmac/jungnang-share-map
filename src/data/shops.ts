@@ -1,4 +1,5 @@
-import raw from "./shops.json";
+// 가게 데이터는 이제 Supabase `shops` 테이블에서 읽어온다 (src/data/shopsStore.ts).
+// shops.json은 최초 seed 소스로만 남아있다 (supabase/migrations).
 
 export type Category = "식품" | "생활·의류" | "보건의료";
 
@@ -12,18 +13,14 @@ export interface Shop {
   dong: string;
 }
 
-export const shops: Shop[] = (raw as Shop[]).filter((s) => s.name && s.name !== "-");
-
 export const categories: { key: Category; label: string; emoji: string }[] = [
   { key: "식품", label: "식품", emoji: "🍚" },
   { key: "생활·의류", label: "생활·의류", emoji: "🧥" },
   { key: "보건의료", label: "보건의료", emoji: "💊" },
 ];
 
-// 동 목록 (가게 수 많은 순, 면목동 우선 / 미등록·구외는 뒤로)
+// 동 정렬 순서 (면목동 우선 / 미등록·구외는 뒤로). 실제 동 목록은 데이터에서 계산.
 export const dongOrder = ["면목동", "상봉동", "중화동", "신내동", "망우동", "묵동", "중랑구 외", "주소 미등록"];
-export const dongs: string[] = dongOrder.filter((d) => shops.some((s) => s.dong === d));
-
 
 // 실제 주소를 우선으로 한 검색어 (주소가 없을 때만 가게 이름으로 대체)
 function shopQuery(shop: Shop) {

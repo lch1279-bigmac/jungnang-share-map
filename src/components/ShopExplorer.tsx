@@ -5,21 +5,18 @@ import {
   HeartHandshake,
   MapPinned,
   Plus,
-  Download,
-  RotateCcw,
   Trash2,
   LogOut,
   ShieldCheck,
+  Loader2,
+  AlertTriangle,
 } from "lucide-react";
 import { categories, dongOrder, type Category, type Shop } from "@/data/shops";
 import {
-  useShops,
-  useIsCustomized,
-  updateShop,
-  deleteShop,
-  addShop,
-  resetShops,
-  downloadShopsJson,
+  useShopsQuery,
+  useAddShop,
+  useUpdateShop,
+  useDeleteShop,
   type ShopRecord,
 } from "@/data/shopsStore";
 import { ShopCard } from "@/components/ShopCard";
@@ -29,7 +26,7 @@ import { MapPanel } from "@/components/MapPanel";
 /**
  * 나눔가게 탐색 화면.
  * - admin=false (기본, 공개 링크): 검색·필터·지도만. 읽기 전용.
- * - admin=true (/admin 로그인): 수정·삭제·추가·내보내기·초기화 노출.
+ * - admin=true (/admin 로그인): 수정·삭제·추가 노출. 쓰기는 DB RLS가 로그인 사용자로 제한.
  */
 export function ShopExplorer({
   admin = false,
@@ -38,8 +35,10 @@ export function ShopExplorer({
   admin?: boolean;
   onLogout?: () => void;
 }) {
-  const shops = useShops();
-  const customized = useIsCustomized();
+  const { data: shops = [], isLoading, isError, error, refetch } = useShopsQuery();
+  const addMut = useAddShop();
+  const updateMut = useUpdateShop();
+  const deleteMut = useDeleteShop();
 
   const [query, setQuery] = useState("");
   const [cat, setCat] = useState<Category | "전체">("전체");
@@ -74,6 +73,8 @@ export function ShopExplorer({
     });
   }, [shops, query, cat, dong]);
 
+  const saving = addMut.isPending || updateMut.isPending;
+
   function openAdd() {
     setEditTarget(null);
     setFormOpen(true);
@@ -84,18 +85,29 @@ export function ShopExplorer({
     setFormOpen(true);
   }
 
-  function handleSave(data: Shop) {
-    if (editTarget) {
-      updateShop(editTarget.id, data);
-    } else {
-      addShop(data);
+  async function handleSave(data: Shop) {
+    try {
+      if (editTarget) {
+        await updateMut.mutateAsync({ id: editTarget.id, patch: data });
+      } else {
+        await addMut.mutateAsync(data);
+      }
+      setFormOpen(false);
+      setEditTarget(null);
+    } catch {
+      window.alert(
+        "저장에 실패했어요. 로그인이 만료됐을 수 있어요. 다시 로그인 후 시도해 주세요.",
+      );
     }
-    setFormOpen(false);
-    setEditTarget(null);
   }
 
-  function confirmDelete() {
-    if (pendingDelete) deleteShop(pendingDelete.id);
+  async function confirmDelete() {
+    if (!pendingDelete) return;
+    try {
+      await deleteMut.mutateAsync(pendingDelete.id);
+    } catch {
+      window.alert("삭제에 실패했어요. 로그인이 만료됐을 수 있어요. 다시 로그인해 주세요.");
+    }
     setPendingDelete(null);
   }
 
@@ -192,62 +204,46 @@ export function ShopExplorer({
             </div>
           </div>
 
-          <div className="flex items-center justify-between gap-2">
-            <p className="text-xs text-muted-foreground">{filtered.length}개 가게</p>
-            {admin && (
-              <div className="flex items-center gap-1.5">
-                {customized && (
-                  <button
-                    onClick={() => {
-                      if (
-                        window.confirm(
-                          "수정·삭제한 내용을 모두 지우고 원본으로 되돌릴까요? 내보내지 않은 변경은 사라집니다.",
-                        )
-                      ) {
-                        resetShops();
-                      }
-                    }}
-                    className="flex items-center gap-1 rounded-lg border border-border bg-background px-2.5 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:bg-muted"
-                    title="원본으로 되돌리기"
-                  >
-                    <RotateCcw className="size-3.5" /> 초기화
-                  </button>
-                )}
-                <button
-                  onClick={downloadShopsJson}
-                  className="flex items-center gap-1 rounded-lg border border-border bg-background px-2.5 py-1.5 text-xs font-semibold text-foreground transition-colors hover:bg-muted"
-                  title="현재 목록을 shops.json 파일로 내려받기"
-                >
-                  <Download className="size-3.5" /> JSON 내보내기
-                </button>
-              </div>
-            )}
-          </div>
+          <p className="text-xs text-muted-foreground">{filtered.length}개 가게</p>
 
-          {admin && customized && (
-            <p className="-mt-1 rounded-xl bg-secondary/50 px-3 py-2 text-xs text-secondary-foreground">
-              변경사항은 이 브라우저에만 저장돼요. 모두에게 반영하려면 <b>JSON 내보내기</b>로
-              받은 파일을 <code>src/data/shops.json</code>에 넣고 커밋하세요.
-            </p>
-          )}
-
-          <div className="flex flex-col gap-2.5">
-            {filtered.map((shop) => (
-              <ShopCard
-                key={shop.id}
-                shop={shop}
-                active={selectedId === shop.id}
-                onSelect={() => setSelectedId(shop.id)}
-                onEdit={admin ? () => openEdit(shop) : undefined}
-                onDelete={admin ? () => setPendingDelete(shop) : undefined}
-              />
-            ))}
-            {filtered.length === 0 && (
-              <p className="py-10 text-center text-sm text-muted-foreground">
-                검색 결과가 없어요.
+          {/* 로딩 / 에러 / 목록 */}
+          {isLoading ? (
+            <div className="flex items-center justify-center gap-2 py-16 text-sm text-muted-foreground">
+              <Loader2 className="size-4 animate-spin" /> 가게 목록을 불러오는 중…
+            </div>
+          ) : isError ? (
+            <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-destructive/40 bg-destructive/5 py-10 text-center">
+              <AlertTriangle className="size-6 text-destructive" />
+              <p className="text-sm font-semibold text-foreground">목록을 불러오지 못했어요.</p>
+              <p className="max-w-xs text-xs text-muted-foreground">
+                {error instanceof Error ? error.message : "네트워크 상태를 확인해 주세요."}
               </p>
-            )}
-          </div>
+              <button
+                onClick={() => refetch()}
+                className="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+              >
+                다시 시도
+              </button>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-2.5">
+              {filtered.map((shop) => (
+                <ShopCard
+                  key={shop.id}
+                  shop={shop}
+                  active={selectedId === shop.id}
+                  onSelect={() => setSelectedId(shop.id)}
+                  onEdit={admin ? () => openEdit(shop) : undefined}
+                  onDelete={admin ? () => setPendingDelete(shop) : undefined}
+                />
+              ))}
+              {filtered.length === 0 && (
+                <p className="py-10 text-center text-sm text-muted-foreground">
+                  {shops.length === 0 ? "등록된 가게가 아직 없어요." : "검색 결과가 없어요."}
+                </p>
+              )}
+            </div>
+          )}
         </section>
 
         {/* Map column (desktop) */}
@@ -290,6 +286,7 @@ export function ShopExplorer({
         {admin && formOpen && (
           <ShopFormModal
             shop={editTarget}
+            busy={saving}
             onSave={handleSave}
             onClose={() => {
               setFormOpen(false);
@@ -316,19 +313,22 @@ export function ShopExplorer({
               <h2 className="mt-3 text-lg font-extrabold text-card-foreground">가게 삭제</h2>
               <p className="mt-1 text-sm text-muted-foreground">
                 <b className="text-card-foreground">{pendingDelete.name}</b> 을(를) 목록에서
-                삭제할까요? 이 브라우저에서만 삭제되며, 초기화하면 되돌릴 수 있어요.
+                삭제할까요? 삭제하면 모든 사용자에게 즉시 반영됩니다.
               </p>
               <div className="mt-5 flex justify-end gap-2">
                 <button
                   onClick={() => setPendingDelete(null)}
-                  className="rounded-xl border border-border bg-background px-4 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-muted"
+                  disabled={deleteMut.isPending}
+                  className="rounded-xl border border-border bg-background px-4 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-muted disabled:opacity-50"
                 >
                   취소
                 </button>
                 <button
                   onClick={confirmDelete}
-                  className="rounded-xl bg-destructive px-4 py-2 text-sm font-semibold text-destructive-foreground transition-opacity hover:opacity-90"
+                  disabled={deleteMut.isPending}
+                  className="flex items-center gap-1.5 rounded-xl bg-destructive px-4 py-2 text-sm font-semibold text-destructive-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
                 >
+                  {deleteMut.isPending && <Loader2 className="size-4 animate-spin" />}
                   삭제
                 </button>
               </div>

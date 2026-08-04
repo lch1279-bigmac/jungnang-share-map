@@ -1,137 +1,82 @@
-import { useSyncExternalStore } from "react";
-import raw from "./shops.json";
-import type { Shop } from "./shops";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import type { Category, Shop } from "./shops";
 
-// 각 가게에 안정적인 id를 부여한 레코드. id는 수정해도 바뀌지 않으므로
-// 편집/삭제 대상을 안전하게 지목할 수 있다.
+// DB에서 온 가게 레코드 (id 포함)
 export interface ShopRecord extends Shop {
   id: string;
 }
 
-const STORAGE_KEY = "jnsm.shops.v1";
+const SELECT_COLS = "id,name,category,address,service,note,frequency,dong,sort_order";
+export const SHOPS_QUERY_KEY = ["shops"] as const;
 
-function withIds(list: Shop[]): ShopRecord[] {
-  return list.map((s, i) => ({
-    ...s,
-    id: (s as Partial<ShopRecord>).id ?? `s${i}`,
+async function fetchShops(): Promise<ShopRecord[]> {
+  const { data, error } = await supabase
+    .from("shops")
+    .select(SELECT_COLS)
+    .order("sort_order", { ascending: true })
+    .order("created_at", { ascending: true });
+  if (error) throw error;
+  return (data ?? []).map((r) => ({
+    id: r.id,
+    name: r.name,
+    category: r.category as Category,
+    address: r.address ?? "",
+    service: r.service ?? "",
+    note: r.note ?? "",
+    frequency: r.frequency ?? "",
+    dong: r.dong ?? "",
   }));
 }
 
-// shops.json 원본 (필터: 이름 없는 빈 행 제거)
-const base: ShopRecord[] = withIds(
-  (raw as Shop[]).filter((s) => s.name && s.name !== "-"),
-);
-
-function load(): ShopRecord[] {
-  if (typeof localStorage === "undefined") return base;
-  try {
-    const str = localStorage.getItem(STORAGE_KEY);
-    if (!str) return base;
-    const parsed = JSON.parse(str);
-    if (Array.isArray(parsed) && parsed.every((s) => s && typeof s.id === "string")) {
-      return parsed as ShopRecord[];
-    }
-  } catch {
-    // 손상된 저장값은 무시하고 원본 사용
-  }
-  return base;
+/** 가게 목록 조회 (공개·관리자 공통). RLS로 읽기는 누구나 허용. */
+export function useShopsQuery() {
+  return useQuery({
+    queryKey: SHOPS_QUERY_KEY,
+    queryFn: fetchShops,
+    staleTime: 30_000,
+  });
 }
 
-let current: ShopRecord[] = load();
-let customized =
-  typeof localStorage !== "undefined" && !!localStorage.getItem(STORAGE_KEY);
-
-const listeners = new Set<() => void>();
-
-function emit() {
-  for (const l of listeners) l();
+/** 가게 추가 (목록 맨 뒤에 배치). RLS로 로그인 사용자만 성공. */
+export function useAddShop() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (shop: Shop) => {
+      const { data: maxRow } = await supabase
+        .from("shops")
+        .select("sort_order")
+        .order("sort_order", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      const sort_order = (maxRow?.sort_order ?? -1) + 1;
+      const { error } = await supabase.from("shops").insert({ ...shop, sort_order });
+      if (error) throw error;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: SHOPS_QUERY_KEY }),
+  });
 }
 
-function persist() {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(current));
-    customized = true;
-  } catch {
-    // 저장 실패해도 화면 상태는 갱신
-  }
-  emit();
+/** 가게 수정. */
+export function useUpdateShop() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, patch }: { id: string; patch: Shop }) => {
+      const { error } = await supabase.from("shops").update(patch).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: SHOPS_QUERY_KEY }),
+  });
 }
 
-function subscribe(cb: () => void) {
-  listeners.add(cb);
-  return () => {
-    listeners.delete(cb);
-  };
-}
-
-// ── React hooks ──────────────────────────────────────────────
-export function useShops(): ShopRecord[] {
-  return useSyncExternalStore(
-    subscribe,
-    () => current,
-    () => base,
-  );
-}
-
-export function useIsCustomized(): boolean {
-  return useSyncExternalStore(
-    subscribe,
-    () => customized,
-    () => false,
-  );
-}
-
-// ── mutations ────────────────────────────────────────────────
-export function updateShop(id: string, patch: Partial<Shop>) {
-  current = current.map((s) => (s.id === id ? { ...s, ...patch } : s));
-  persist();
-}
-
-export function deleteShop(id: string) {
-  current = current.filter((s) => s.id !== id);
-  persist();
-}
-
-export function addShop(shop: Shop) {
-  current = [{ ...shop, id: `s${Date.now()}` }, ...current];
-  persist();
-}
-
-export function resetShops() {
-  current = base;
-  customized = false;
-  try {
-    localStorage.removeItem(STORAGE_KEY);
-  } catch {
-    // ignore
-  }
-  emit();
-}
-
-// ── export ───────────────────────────────────────────────────
-// shops.json과 동일한 필드/순서로 직렬화 (id 제외). git에 커밋해 영구 반영.
-export function exportShopsJson(): string {
-  const clean = current.map((s) => ({
-    name: s.name,
-    category: s.category,
-    address: s.address,
-    service: s.service,
-    note: s.note,
-    frequency: s.frequency,
-    dong: s.dong,
-  }));
-  return JSON.stringify(clean, null, 2);
-}
-
-export function downloadShopsJson() {
-  if (typeof document === "undefined") return;
-  const blob = new Blob([exportShopsJson()], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "shops.json";
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
+/** 가게 삭제. */
+export function useDeleteShop() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("shops").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: SHOPS_QUERY_KEY }),
+  });
 }

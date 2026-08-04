@@ -29,11 +29,14 @@ const dongOptions = [
 
 export function ShopFormModal({
   shop,
+  busy = false,
   onSave,
   onClose,
 }: {
   /** 편집 대상. null이면 새 가게 추가 모드 */
   shop: ShopRecord | null;
+  /** 저장(DB 반영) 진행 중 여부 */
+  busy?: boolean;
   onSave: (data: Shop) => void;
   onClose: () => void;
 }) {
@@ -247,9 +250,10 @@ export function ShopFormModal({
           </button>
           <button
             type="submit"
-            disabled={!form.name.trim()}
-            className="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-40"
+            disabled={!form.name.trim() || busy}
+            className="flex items-center gap-1.5 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-40"
           >
+            {busy && <Loader2 className="size-4 animate-spin" />}
             {isEdit ? "저장" : "추가"}
           </button>
         </div>

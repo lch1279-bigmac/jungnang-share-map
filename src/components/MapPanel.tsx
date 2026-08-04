@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
-import { ExternalLink, MapPin, X } from "lucide-react";
+import { ExternalLink, MapPin, Phone, X } from "lucide-react";
 import type { Shop } from "@/data/shops";
-import { fullAddress, mapEmbedUrl, mapLinkUrl, kakaoMapUrl, naverMapUrl } from "@/data/shops";
+import { fullAddress, telHref, mapEmbedUrl, mapLinkUrl, kakaoMapUrl, naverMapUrl } from "@/data/shops";
 
 export function MapPanel({
   shop,
@@ -24,6 +24,15 @@ export function MapPanel({
             <MapPin className="size-4 shrink-0" />
             {fullAddress(shop) || "주소 미등록"}
           </p>
+          {telHref(shop.phone) && (
+            <a
+              href={telHref(shop.phone)!}
+              className="mt-2.5 inline-flex items-center gap-1.5 rounded-xl bg-primary px-3 py-1.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+            >
+              <Phone className="size-4" /> 전화 걸기
+              <span className="font-normal opacity-90">{shop.phone}</span>
+            </a>
+          )}
         </div>
         <button
           onClick={onClose}

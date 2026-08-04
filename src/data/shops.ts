@@ -11,8 +11,16 @@ export interface Shop {
   addressDetail: string;
   /** 소개글 (기존 나눔내용·빈도를 대체) */
   intro: string;
+  /** 전화번호 (있으면 전화걸기 버튼 노출) */
+  phone: string;
   note: string;
   dong: string;
+}
+
+/** tel: 링크용으로 전화번호에서 숫자·+ 만 남긴다. 없으면 null */
+export function telHref(phone: string): string | null {
+  const cleaned = (phone || "").replace(/[^\d+]/g, "");
+  return cleaned ? `tel:${cleaned}` : null;
 }
 
 /** 기본주소 + 상세주소를 합친 표시용 전체 주소 */

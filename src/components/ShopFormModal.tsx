@@ -12,6 +12,7 @@ const empty: Shop = {
   address: "",
   addressDetail: "",
   intro: "",
+  phone: "",
   note: "",
   dong: "",
 };
@@ -255,6 +256,16 @@ export function ShopFormModal({
               onChange={(e) => set("addressDetail", e.target.value)}
               className={inputClass}
               placeholder="예: 1층, 3층 302호"
+            />
+          </Field>
+
+          <Field label="전화번호" hint="입력하면 지도에 전화걸기 버튼이 나와요 (선택)">
+            <input
+              type="tel"
+              value={form.phone}
+              onChange={(e) => set("phone", e.target.value)}
+              className={inputClass}
+              placeholder="예: 02-1234-5678, 010-1234-5678"
             />
           </Field>
 

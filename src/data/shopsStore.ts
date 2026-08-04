@@ -14,7 +14,7 @@ export interface DeletedShopRecord extends ShopRecord {
 }
 
 const SELECT_COLS =
-  "id,name,category,address,address_detail,intro,note,dong,sort_order,updated_at";
+  "id,name,category,address,address_detail,intro,phone,note,dong,sort_order,updated_at";
 export const SHOPS_QUERY_KEY = ["shops"] as const;
 export const DELETED_SHOPS_QUERY_KEY = ["shops", "deleted"] as const;
 
@@ -25,6 +25,7 @@ function mapRow(r: {
   address: string | null;
   address_detail: string | null;
   intro: string | null;
+  phone: string | null;
   note: string | null;
   dong: string | null;
   updated_at: string;
@@ -36,6 +37,7 @@ function mapRow(r: {
     address: r.address ?? "",
     addressDetail: r.address_detail ?? "",
     intro: r.intro ?? "",
+    phone: r.phone ?? "",
     note: r.note ?? "",
     dong: r.dong ?? "",
     updatedAt: r.updated_at,

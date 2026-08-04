@@ -11,7 +11,7 @@ import {
   Loader2,
   AlertTriangle,
 } from "lucide-react";
-import { categories, dongOrder, type Category, type Shop } from "@/data/shops";
+import { categories, dongOrder, findAmbiguousNames, type Category, type Shop } from "@/data/shops";
 import {
   useShopsQuery,
   useAddShop,

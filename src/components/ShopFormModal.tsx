@@ -4,6 +4,7 @@ import { X, Search, Loader2 } from "lucide-react";
 import { categories, deriveDong, type Category, type Shop } from "@/data/shops";
 import type { ShopRecord } from "@/data/shopsStore";
 import { loadDaumPostcode } from "@/lib/daumPostcode";
+import { resolveRegion } from "@/lib/api/geocode.functions";
 
 const empty: Shop = {
   name: "",
@@ -75,13 +76,36 @@ export function ShopFormModal({
   }
 
   // 주소를 바꾸면 동네(dong)를 자동 추론해 함께 갱신 → 해당 동네 탭으로 이동.
-  // dongHint를 주면(주소검색의 법정동) 그것으로 우선 판단, 아니면 주소에서 추론.
-  // 판단 불가(도로명만 있어 법정동 미상)면 기존 동네 값을 유지.
+  // 1) dongHint(주소검색의 법정동)나 지번 주소면 글자에서 즉시 추론.
+  // 2) 도로명이라 글자로 판단 불가하면(deriveDong=null) 카카오 지오코딩으로 법정동 조회(디바운스).
+  const geocodeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(
+    () => () => {
+      if (geocodeTimer.current) clearTimeout(geocodeTimer.current);
+    },
+    [],
+  );
+
   function setAddress(address: string, dongHint?: string) {
-    setForm((f) => {
-      const derived = deriveDong(dongHint || address);
-      return { ...f, address, ...(derived ? { dong: derived } : {}) };
-    });
+    const local = deriveDong(dongHint || address);
+    setForm((f) => ({ ...f, address, ...(local ? { dong: local } : {}) }));
+
+    if (geocodeTimer.current) clearTimeout(geocodeTimer.current);
+    // 힌트가 없고 글자만으론 중랑구 법정동을 못 찾은 경우(도로명) → 좌표 기반 조회
+    if (!dongHint && local === null) {
+      geocodeTimer.current = setTimeout(async () => {
+        try {
+          const { region } = await resolveRegion({ data: { address } });
+          const derived = region ? deriveDong(region) : null;
+          if (derived) {
+            // 조회 중 주소가 또 바뀌지 않았을 때만 반영
+            setForm((f) => (f.address === address ? { ...f, dong: derived } : f));
+          }
+        } catch {
+          // 실패 시 동네는 수동 입력으로 폴백
+        }
+      }, 600);
+    }
   }
 
   // ── 주소 검색 (다음 우편번호 서비스) ──

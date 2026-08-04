@@ -22,51 +22,13 @@ export const categories: { key: Category; label: string; emoji: string }[] = [
 // 동 정렬 순서 (면목동 우선 / 미등록·구외는 뒤로). 실제 동 목록은 데이터에서 계산.
 export const dongOrder = ["면목동", "상봉동", "중화동", "신내동", "망우동", "묵동", "중랑구 외", "주소 미등록"];
 
-/** 상호명 비교용 정규화: 공백·기호 제거, 소문자화, 지점 표기 제거 */
-export function normalizeShopName(name: string) {
-  return name
-    .toLowerCase()
-    .replace(/[\s()[\]{}.,·・'"“”‘’\-_/]/g, "")
-    .replace(/(본점|직영점|지점|점)$/u, "");
-}
-
-/** 같거나 비슷한 상호를 가진 가게 이름 집합 (지도 검색 시 주소 사용) */
-export function findAmbiguousNames(shops: { name: string }[]) {
-  const groups = new Map<string, string[]>();
-  for (const s of shops) {
-    const key = normalizeShopName(s.name);
-    if (!key) continue;
-    groups.set(key, [...(groups.get(key) ?? []), s.name]);
-  }
-  const keys = [...groups.keys()];
-  const ambiguous = new Set<string>();
-  for (let i = 0; i < keys.length; i++) {
-    const a = keys[i];
-    // 완전히 같은(정규화 후) 상호가 둘 이상
-    if ((groups.get(a) ?? []).length > 1) groups.get(a)!.forEach((n) => ambiguous.add(n));
-    for (let j = i + 1; j < keys.length; j++) {
-      const b = keys[j];
-      // 비슷한 상호: 한쪽이 다른 쪽으로 시작하고 길이가 2자 이상
-      const similar =
-        a.length >= 2 && b.length >= 2 && (a.startsWith(b) || b.startsWith(a));
-      if (similar) {
-        groups.get(a)!.forEach((n) => ambiguous.add(n));
-        groups.get(b)!.forEach((n) => ambiguous.add(n));
-      }
-    }
-  }
-  return ambiguous;
-}
-
-// 지도 검색어: 기본은 상호명만. 같거나 비슷한 상호가 있을 때(ambiguous)는
-// 주소로 검색한다(주소가 없으면 상호명으로 폴백).
-function shopQuery(shop: Shop, ambiguous = false) {
-  if (ambiguous) {
-    const addr = shop.address?.trim();
-    if (addr && addr !== "-" && addr !== "주소 미등록") return addr;
-  }
+// 지도 검색어: 항상 주소로 검색한다 (주소가 없으면 상호명으로 폴백).
+function shopQuery(shop: Shop) {
+  const addr = shop.address?.trim();
+  if (addr && addr !== "-" && addr !== "주소 미등록") return addr;
   return shop.name;
 }
+
 
 export function mapEmbedUrl(shop: Shop, ambiguous = false) {
   const q = encodeURIComponent(shopQuery(shop, ambiguous));

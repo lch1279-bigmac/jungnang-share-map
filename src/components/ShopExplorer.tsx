@@ -111,7 +111,7 @@ export function ShopExplorer({
           </div>
           <div className="min-w-0 flex-1">
             <h1 className="flex items-center gap-1.5 truncate text-lg font-extrabold leading-tight text-foreground">
-              중랑구 나눔가게 지도
+              우리동네 나눔가게 지도
               {admin && (
                 <span className="inline-flex items-center gap-1 rounded-full bg-primary/12 px-2 py-0.5 text-xs font-bold text-primary">
                   <ShieldCheck className="size-3" /> 관리자
@@ -119,7 +119,7 @@ export function ShopExplorer({
               )}
             </h1>
             <p className="truncate text-xs text-muted-foreground">
-              따뜻한 마음을 나누는 우리동네 {shops.length}곳
+              따뜻한 마음을 나누는 우리동네 나눔가게 {shops.length}곳
             </p>
           </div>
           {admin && (

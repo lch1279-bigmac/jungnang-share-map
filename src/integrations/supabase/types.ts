@@ -16,43 +16,43 @@ export type Database = {
     Tables: {
       shops: {
         Row: {
-          id: string
-          name: string
-          category: string
           address: string
-          intro: string
-          note: string
-          dong: string
-          sort_order: number
+          category: string
           created_at: string
-          updated_at: string
           deleted_at: string | null
+          dong: string
+          id: string
+          intro: string
+          name: string
+          note: string
+          sort_order: number
+          updated_at: string
         }
         Insert: {
-          id?: string
-          name: string
-          category?: string
           address?: string
-          intro?: string
-          note?: string
-          dong?: string
-          sort_order?: number
+          category?: string
           created_at?: string
-          updated_at?: string
           deleted_at?: string | null
+          dong?: string
+          id?: string
+          intro?: string
+          name: string
+          note?: string
+          sort_order?: number
+          updated_at?: string
         }
         Update: {
-          id?: string
-          name?: string
-          category?: string
           address?: string
-          intro?: string
-          note?: string
-          dong?: string
-          sort_order?: number
+          category?: string
           created_at?: string
-          updated_at?: string
           deleted_at?: string | null
+          dong?: string
+          id?: string
+          intro?: string
+          name?: string
+          note?: string
+          sort_order?: number
+          updated_at?: string
         }
         Relationships: []
       }

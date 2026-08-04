@@ -11,7 +11,7 @@ import {
   Loader2,
   AlertTriangle,
 } from "lucide-react";
-import { categories, dongOrder, type Category, type Shop } from "@/data/shops";
+import { categories, dongOrder, findAmbiguousNames, type Category, type Shop } from "@/data/shops";
 import {
   useShopsQuery,
   useAddShop,
@@ -61,12 +61,8 @@ export function ShopExplorer({
     [shops],
   );
 
-  // 같은 상호명이 둘 이상인 이름들 → 지도 검색 시 주소로 구분
-  const duplicateNames = useMemo(() => {
-    const counts = new Map<string, number>();
-    for (const s of shops) counts.set(s.name, (counts.get(s.name) ?? 0) + 1);
-    return new Set([...counts].filter(([, n]) => n > 1).map(([name]) => name));
-  }, [shops]);
+  // 같거나 비슷한 상호명 → 지도 검색 시 주소로 검색
+  const duplicateNames = useMemo(() => findAmbiguousNames(shops), [shops]);
 
   // DB 기준일 = 가게들의 최종 수정시각 중 가장 최근 (수정·추가 시 자동 갱신)
   const asOfDate = useMemo(() => {

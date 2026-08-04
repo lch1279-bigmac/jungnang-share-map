@@ -17,9 +17,13 @@ export function ShopCard({
   shop: Shop;
   active: boolean;
   onSelect: () => void;
-  onEdit: () => void;
-  onDelete: () => void;
+  /** admin 모드에서만 전달. 없으면 수정 버튼 숨김 */
+  onEdit?: () => void;
+  /** admin 모드에서만 전달. 없으면 삭제 버튼 숨김 */
+  onDelete?: () => void;
 }) {
+  const hasActions = Boolean(onEdit || onDelete);
+
   return (
     <div
       className={`group relative rounded-2xl border bg-card transition-colors ${
@@ -33,8 +37,8 @@ export function ShopCard({
         className="w-full text-left rounded-2xl p-4 transition-transform active:scale-[0.99]"
       >
         <div className="flex items-start justify-between gap-2">
-          {/* 수정/삭제 버튼과 겹치지 않도록 오른쪽 여백 확보 */}
-          <h3 className="font-bold text-card-foreground leading-snug pr-16">
+          {/* 수정/삭제 버튼이 있을 때만 오른쪽 여백 확보 */}
+          <h3 className={`font-bold text-card-foreground leading-snug ${hasActions ? "pr-16" : ""}`}>
             {shop.name}
           </h3>
           <span
@@ -56,25 +60,31 @@ export function ShopCard({
         </p>
       </button>
 
-      {/* 수정 / 삭제 액션 (카드 우상단, 카테고리 배지 아래) */}
-      <div className="absolute right-3 top-11 flex gap-1">
-        <button
-          onClick={onEdit}
-          aria-label={`${shop.name} 수정`}
-          title="수정"
-          className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-        >
-          <Pencil className="size-4" />
-        </button>
-        <button
-          onClick={onDelete}
-          aria-label={`${shop.name} 삭제`}
-          title="삭제"
-          className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
-        >
-          <Trash2 className="size-4" />
-        </button>
-      </div>
+      {/* 수정 / 삭제 액션 (admin 전용, 카드 우상단 카테고리 배지 아래) */}
+      {hasActions && (
+        <div className="absolute right-3 top-11 flex gap-1">
+          {onEdit && (
+            <button
+              onClick={onEdit}
+              aria-label={`${shop.name} 수정`}
+              title="수정"
+              className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            >
+              <Pencil className="size-4" />
+            </button>
+          )}
+          {onDelete && (
+            <button
+              onClick={onDelete}
+              aria-label={`${shop.name} 삭제`}
+              title="삭제"
+              className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+            >
+              <Trash2 className="size-4" />
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

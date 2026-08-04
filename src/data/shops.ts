@@ -38,7 +38,9 @@ export function mapEmbedUrl(shop: Shop) {
 }
 
 export function mapLinkUrl(shop: Shop) {
-  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(shopQuery(shop))}`;
+  // /maps/search/?api=1 형식은 임베드/프리뷰 맥락에서 리다이렉트 중
+  // ERR_BLOCKED_BY_RESPONSE로 차단되는 경우가 있어, 바로 핀으로 여는 maps?q= 사용.
+  return `https://www.google.com/maps?q=${encodeURIComponent(shopQuery(shop))}`;
 }
 
 export function kakaoMapUrl(shop: Shop) {

@@ -78,16 +78,19 @@ export function ShopExplorer({
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return shops.filter((s) => {
-      if (cat !== "전체" && s.category !== cat) return false;
-      if (dong !== "전체" && s.dong !== dong) return false;
-      if (!q) return true;
-      return (
-        s.name.toLowerCase().includes(q) ||
-        s.address.toLowerCase().includes(q) ||
-        s.intro.toLowerCase().includes(q)
-      );
-    });
+    return shops
+      .filter((s) => {
+        if (cat !== "전체" && s.category !== cat) return false;
+        if (dong !== "전체" && s.dong !== dong) return false;
+        if (!q) return true;
+        return (
+          s.name.toLowerCase().includes(q) ||
+          s.address.toLowerCase().includes(q) ||
+          s.intro.toLowerCase().includes(q)
+        );
+      })
+      // 가게 이름 가나다순 정렬
+      .sort((a, b) => a.name.localeCompare(b.name, "ko"));
   }, [shops, query, cat, dong]);
 
   const saving = addMut.isPending || updateMut.isPending;

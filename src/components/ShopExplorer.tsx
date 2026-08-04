@@ -21,6 +21,7 @@ import {
 } from "@/data/shopsStore";
 import { ShopCard } from "@/components/ShopCard";
 import { ShopFormModal } from "@/components/ShopFormModal";
+import { TrashModal } from "@/components/TrashModal";
 import { MapPanel } from "@/components/MapPanel";
 
 /**
@@ -48,6 +49,7 @@ export function ShopExplorer({
   const [formOpen, setFormOpen] = useState(false);
   const [editTarget, setEditTarget] = useState<ShopRecord | null>(null);
   const [pendingDelete, setPendingDelete] = useState<ShopRecord | null>(null);
+  const [trashOpen, setTrashOpen] = useState(false);
 
   const selected = useMemo(
     () => shops.find((s) => s.id === selectedId) ?? null,
@@ -137,7 +139,7 @@ export function ShopExplorer({
           </div>
           <div className="min-w-0 flex-1">
             <h1 className="flex items-center gap-1.5 truncate text-lg font-extrabold leading-tight text-foreground">
-              우리동네 나눔가게 및 아름다운 이웃 지도
+              우리동네 '나눔가게 및 아름다운 이웃' 지도
               {admin && (
                 <span className="inline-flex items-center gap-1 rounded-full bg-primary/12 px-2 py-0.5 text-xs font-bold text-primary">
                   <ShieldCheck className="size-3" /> 관리자
@@ -155,6 +157,13 @@ export function ShopExplorer({
                 className="flex shrink-0 items-center gap-1.5 rounded-xl bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
               >
                 <Plus className="size-4" /> <span className="hidden sm:inline">가게 추가</span>
+              </button>
+              <button
+                onClick={() => setTrashOpen(true)}
+                title="휴지통"
+                className="flex shrink-0 items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:bg-muted"
+              >
+                <Trash2 className="size-4" /> <span className="hidden sm:inline">휴지통</span>
               </button>
               {onLogout && (
                 <button
@@ -331,8 +340,8 @@ export function ShopExplorer({
               </div>
               <h2 className="mt-3 text-lg font-extrabold text-card-foreground">가게 삭제</h2>
               <p className="mt-1 text-sm text-muted-foreground">
-                <b className="text-card-foreground">{pendingDelete.name}</b> 을(를) 목록에서
-                삭제할까요? 삭제하면 모든 사용자에게 즉시 반영됩니다.
+                <b className="text-card-foreground">{pendingDelete.name}</b> 을(를)
+                휴지통으로 옮길까요? 목록에서 숨겨지며, 휴지통에서 언제든 복원할 수 있어요.
               </p>
               <div className="mt-5 flex justify-end gap-2">
                 <button
@@ -348,12 +357,17 @@ export function ShopExplorer({
                   className="flex items-center gap-1.5 rounded-xl bg-destructive px-4 py-2 text-sm font-semibold text-destructive-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
                 >
                   {deleteMut.isPending && <Loader2 className="size-4 animate-spin" />}
-                  삭제
+                  휴지통으로 이동
                 </button>
               </div>
             </motion.div>
           </div>
         )}
+      </AnimatePresence>
+
+      {/* 휴지통 (admin 전용) */}
+      <AnimatePresence>
+        {admin && trashOpen && <TrashModal onClose={() => setTrashOpen(false)} />}
       </AnimatePresence>
     </div>
   );

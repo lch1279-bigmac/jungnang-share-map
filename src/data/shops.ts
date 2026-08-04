@@ -29,22 +29,21 @@ function shopQuery(shop: Shop) {
   return shop.name;
 }
 
-
-export function mapEmbedUrl(shop: Shop, ambiguous = false) {
-  const q = encodeURIComponent(shopQuery(shop, ambiguous));
+export function mapEmbedUrl(shop: Shop) {
+  const q = encodeURIComponent(shopQuery(shop));
   return `https://maps.google.com/maps?q=${q}&z=17&hl=ko&output=embed`;
 }
 
-export function mapLinkUrl(shop: Shop, ambiguous = false) {
+export function mapLinkUrl(shop: Shop) {
   // /maps/search/?api=1 형식은 임베드/프리뷰 맥락에서 리다이렉트 중
   // ERR_BLOCKED_BY_RESPONSE로 차단되는 경우가 있어, 바로 핀으로 여는 maps?q= 사용.
-  return `https://www.google.com/maps?q=${encodeURIComponent(shopQuery(shop, ambiguous))}`;
+  return `https://www.google.com/maps?q=${encodeURIComponent(shopQuery(shop))}`;
 }
 
-export function kakaoMapUrl(shop: Shop, ambiguous = false) {
-  return `https://map.kakao.com/?q=${encodeURIComponent(shopQuery(shop, ambiguous))}`;
+export function kakaoMapUrl(shop: Shop) {
+  return `https://map.kakao.com/?q=${encodeURIComponent(shopQuery(shop))}`;
 }
 
-export function naverMapUrl(shop: Shop, ambiguous = false) {
-  return `https://map.naver.com/p/search/${encodeURIComponent(shopQuery(shop, ambiguous))}`;
+export function naverMapUrl(shop: Shop) {
+  return `https://map.naver.com/p/search/${encodeURIComponent(shopQuery(shop))}`;
 }

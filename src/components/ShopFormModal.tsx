@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { X, Search, Loader2 } from "lucide-react";
-import { categories, type Category, type Shop } from "@/data/shops";
+import { categories, deriveDong, type Category, type Shop } from "@/data/shops";
 import type { ShopRecord } from "@/data/shopsStore";
 import { loadDaumPostcode } from "@/lib/daumPostcode";
 
@@ -74,6 +74,16 @@ export function ShopFormModal({
     setForm((f) => ({ ...f, [key]: value }));
   }
 
+  // 주소를 바꾸면 동네(dong)를 자동 추론해 함께 갱신 → 해당 동네 탭으로 이동.
+  // dongHint를 주면(주소검색의 법정동) 그것으로 우선 판단, 아니면 주소에서 추론.
+  // 판단 불가(도로명만 있어 법정동 미상)면 기존 동네 값을 유지.
+  function setAddress(address: string, dongHint?: string) {
+    setForm((f) => {
+      const derived = deriveDong(dongHint || address);
+      return { ...f, address, ...(derived ? { dong: derived } : {}) };
+    });
+  }
+
   // ── 주소 검색 (다음 우편번호 서비스) ──
   function openPostcode() {
     setPostcodeError(false);
@@ -93,7 +103,9 @@ export function ShopFormModal({
           oncomplete: (data) => {
             const base =
               data.userSelectedType === "R" ? data.roadAddress : data.jibunAddress;
-            set("address", base);
+            // 도로명 주소라도 시군구+법정동으로 동네를 정확히 판단
+            const dongHint = `${data.sido ?? ""} ${data.sigungu ?? ""} ${data.bname ?? ""}`;
+            setAddress(base, dongHint);
             setPostcodeOpen(false);
             // 상세주소(층/호 등)를 이어서 입력할 수 있도록 포커스
             requestAnimationFrame(() => addressInputRef.current?.focus());
@@ -170,7 +182,7 @@ export function ShopFormModal({
                 ))}
               </select>
             </Field>
-            <Field label="동네">
+            <Field label="동네" hint="주소로 자동 설정 (필요시 수정)">
               <input
                 list="dong-options"
                 value={form.dong}
@@ -186,12 +198,12 @@ export function ShopFormModal({
             </Field>
           </div>
 
-          <Field label="주소" hint="주소 검색으로 선택 후 층·호 등 상세주소를 덧붙이세요">
+          <Field label="주소" hint="주소를 바꾸면 동네가 자동으로 맞춰져요">
             <div className="flex gap-2">
               <input
                 ref={addressInputRef}
                 value={form.address}
-                onChange={(e) => set("address", e.target.value)}
+                onChange={(e) => setAddress(e.target.value)}
                 className={`${inputClass} flex-1`}
                 placeholder="주소 검색을 눌러 도로명·지번 주소를 선택하세요"
               />

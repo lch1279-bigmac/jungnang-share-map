@@ -22,6 +22,33 @@ export const categories: { key: Category; label: string; emoji: string }[] = [
 // 동 정렬 순서 (면목동 우선 / 미등록·구외는 뒤로). 실제 동 목록은 데이터에서 계산.
 export const dongOrder = ["면목동", "상봉동", "중화동", "신내동", "망우동", "묵동", "중랑구 외", "주소 미등록"];
 
+// 중랑구 법정동 6곳. 행정동(면목2동, 중화1동…)·본동도 base 법정동으로 묶는다.
+const DONG_BASES: [string, string][] = [
+  ["면목", "면목동"],
+  ["상봉", "상봉동"],
+  ["중화", "중화동"],
+  ["신내", "신내동"],
+  ["망우", "망우동"],
+  ["묵", "묵동"],
+];
+
+/**
+ * 주소(또는 "시군구 법정동" 문자열)에서 동네 탭 값을 추론.
+ * - 빈 주소 → "주소 미등록"
+ * - 중랑구 법정동을 찾으면 그 base 동 (예: 면목2동·면목본동 → "면목동")
+ * - 중랑구인데 법정동을 못 찾으면(도로명만 있음) → null (판단 보류)
+ * - 그 외 지역 → "중랑구 외"
+ */
+export function deriveDong(address: string): string | null {
+  const a = (address || "").trim();
+  if (!a) return "주소 미등록";
+  for (const [key, val] of DONG_BASES) {
+    if (new RegExp(`${key}[0-9·,.본]*동`).test(a)) return val;
+  }
+  if (a.includes("중랑구")) return null;
+  return "중랑구 외";
+}
+
 // 지도 검색어: 항상 주소로 검색한다 (주소가 없으면 상호명으로 폴백).
 function shopQuery(shop: Shop) {
   const addr = shop.address?.trim();

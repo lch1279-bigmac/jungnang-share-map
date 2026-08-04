@@ -12,6 +12,12 @@ export interface DaumPostcodeData {
   zonecode: string;
   /** 건물명 */
   buildingName: string;
+  /** 시/도 (예: 서울) */
+  sido: string;
+  /** 시/군/구 (예: 중랑구) */
+  sigungu: string;
+  /** 법정동/법정리 (예: 면목동) */
+  bname: string;
   [key: string]: unknown;
 }
 

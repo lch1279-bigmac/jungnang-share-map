@@ -77,18 +77,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "중랑구 나눔가게 지도 — 우리동네 나눔가게" },
+      { title: "우리동네 나눔가게 및 아름다운 이웃 지도" },
       { name: "description", content: "서울 중랑구의 나눔가게를 식품·생활·의류·보건의료로 살펴보고, 가게를 누르면 구글지도로 위치를 확인할 수 있는 모바일 친화 지도 앱." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "중랑구 나눔가게 지도 — 우리동네 나눔가게" },
+      { property: "og:title", content: "우리동네 나눔가게 및 아름다운 이웃 지도" },
       { property: "og:description", content: "서울 중랑구의 나눔가게를 식품·생활·의류·보건의료로 살펴보고, 가게를 누르면 구글지도로 위치를 확인할 수 있는 모바일 친화 지도 앱." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
-      { name: "twitter:title", content: "중랑구 나눔가게 지도 — 우리동네 나눔가게" },
+      { name: "twitter:title", content: "우리동네 나눔가게 및 아름다운 이웃 지도" },
       { name: "twitter:description", content: "서울 중랑구의 나눔가게를 식품·생활·의류·보건의료로 살펴보고, 가게를 누르면 구글지도로 위치를 확인할 수 있는 모바일 친화 지도 앱." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/19daf65b-891d-4593-b58e-88b5e922e6b2" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/19daf65b-891d-4593-b58e-88b5e922e6b2" },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/929be587-1bda-4655-8a5a-68b31caf74a8" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/929be587-1bda-4655-8a5a-68b31caf74a8" },
     ],
     links: [
       {

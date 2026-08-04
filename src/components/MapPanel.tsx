@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { ExternalLink, MapPin, X } from "lucide-react";
 import type { Shop } from "@/data/shops";
-import { mapEmbedUrl, mapLinkUrl, kakaoMapUrl, naverMapUrl } from "@/data/shops";
+import { fullAddress, mapEmbedUrl, mapLinkUrl, kakaoMapUrl, naverMapUrl } from "@/data/shops";
 
 export function MapPanel({
   shop,
@@ -22,7 +22,7 @@ export function MapPanel({
           <h2 className="text-xl font-extrabold text-card-foreground">{shop.name}</h2>
           <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
             <MapPin className="size-4 shrink-0" />
-            {shop.address || "주소 미등록"}
+            {fullAddress(shop) || "주소 미등록"}
           </p>
         </div>
         <button

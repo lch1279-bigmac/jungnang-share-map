@@ -1,4 +1,4 @@
-import type { Shop } from "@/data/shops";
+import { fullAddress, type Shop } from "@/data/shops";
 import { MapPin, Pencil, Trash2 } from "lucide-react";
 
 const catStyles: Record<string, string> = {
@@ -56,7 +56,7 @@ export function ShopCard({
         )}
         <p className="mt-2 flex items-start gap-1 text-xs text-muted-foreground">
           <MapPin className="mt-0.5 size-3.5 shrink-0" />
-          <span className="line-clamp-1">{shop.address || "주소 미등록"}</span>
+          <span className="line-clamp-1">{fullAddress(shop) || "주소 미등록"}</span>
         </p>
       </button>
 

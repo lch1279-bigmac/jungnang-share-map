@@ -7,10 +7,17 @@ export interface Shop {
   name: string;
   category: Category;
   address: string;
+  /** 상세주소 (층/호 등). 지도 검색·동네 판정에는 쓰지 않음 */
+  addressDetail: string;
   /** 소개글 (기존 나눔내용·빈도를 대체) */
   intro: string;
   note: string;
   dong: string;
+}
+
+/** 기본주소 + 상세주소를 합친 표시용 전체 주소 */
+export function fullAddress(shop: Pick<Shop, "address" | "addressDetail">): string {
+  return [shop.address, shop.addressDetail].filter((v) => v && v.trim()).join(" ");
 }
 
 export const categories: { key: Category; label: string; emoji: string }[] = [

@@ -13,7 +13,8 @@ export interface DeletedShopRecord extends ShopRecord {
   deletedAt: string;
 }
 
-const SELECT_COLS = "id,name,category,address,intro,note,dong,sort_order,updated_at";
+const SELECT_COLS =
+  "id,name,category,address,address_detail,intro,note,dong,sort_order,updated_at";
 export const SHOPS_QUERY_KEY = ["shops"] as const;
 export const DELETED_SHOPS_QUERY_KEY = ["shops", "deleted"] as const;
 
@@ -22,6 +23,7 @@ function mapRow(r: {
   name: string;
   category: string;
   address: string | null;
+  address_detail: string | null;
   intro: string | null;
   note: string | null;
   dong: string | null;
@@ -32,11 +34,18 @@ function mapRow(r: {
     name: r.name,
     category: r.category as Category,
     address: r.address ?? "",
+    addressDetail: r.address_detail ?? "",
     intro: r.intro ?? "",
     note: r.note ?? "",
     dong: r.dong ?? "",
     updatedAt: r.updated_at,
   };
+}
+
+// Shop(camelCase) → DB row(snake_case) 변환. addressDetail만 컬럼명이 다름.
+function toDbFields(shop: Shop) {
+  const { addressDetail, ...rest } = shop;
+  return { ...rest, address_detail: addressDetail };
 }
 
 async function fetchShops(): Promise<ShopRecord[]> {
@@ -96,7 +105,9 @@ export function useAddShop() {
         .limit(1)
         .maybeSingle();
       const sort_order = (maxRow?.sort_order ?? -1) + 1;
-      const { error } = await supabase.from("shops").insert({ ...shop, sort_order });
+      const { error } = await supabase
+        .from("shops")
+        .insert({ ...toDbFields(shop), sort_order });
       if (error) throw error;
     },
     onSuccess: () => invalidateAll(qc),
@@ -108,7 +119,7 @@ export function useUpdateShop() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, patch }: { id: string; patch: Shop }) => {
-      const { error } = await supabase.from("shops").update(patch).eq("id", id);
+      const { error } = await supabase.from("shops").update(toDbFields(patch)).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => invalidateAll(qc),

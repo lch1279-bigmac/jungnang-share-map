@@ -17,6 +17,7 @@ export type Database = {
       shops: {
         Row: {
           address: string
+          address_detail: string
           category: string
           created_at: string
           deleted_at: string | null
@@ -30,6 +31,7 @@ export type Database = {
         }
         Insert: {
           address?: string
+          address_detail?: string
           category?: string
           created_at?: string
           deleted_at?: string | null
@@ -43,6 +45,7 @@ export type Database = {
         }
         Update: {
           address?: string
+          address_detail?: string
           category?: string
           created_at?: string
           deleted_at?: string | null

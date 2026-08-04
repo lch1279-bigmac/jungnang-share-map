@@ -10,6 +10,7 @@ const empty: Shop = {
   name: "",
   category: "식품",
   address: "",
+  addressDetail: "",
   intro: "",
   note: "",
   dong: "",
@@ -48,6 +49,7 @@ export function ShopFormModal({
   const [postcodeError, setPostcodeError] = useState(false);
   const postcodeRef = useRef<HTMLDivElement>(null);
   const addressInputRef = useRef<HTMLInputElement>(null);
+  const detailInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (shop) {
@@ -131,8 +133,8 @@ export function ShopFormModal({
             const dongHint = `${data.sido ?? ""} ${data.sigungu ?? ""} ${data.bname ?? ""}`;
             setAddress(base, dongHint);
             setPostcodeOpen(false);
-            // 상세주소(층/호 등)를 이어서 입력할 수 있도록 포커스
-            requestAnimationFrame(() => addressInputRef.current?.focus());
+            // 기본주소를 넣었으니 상세주소(층/호 등) 입력란으로 포커스 이동
+            requestAnimationFrame(() => detailInputRef.current?.focus());
           },
           onclose: () => setPostcodeOpen(false),
           width: "100%",
@@ -244,6 +246,16 @@ export function ShopFormModal({
                 주소 검색을 불러오지 못했어요. 네트워크 확인 후 다시 시도하거나 직접 입력하세요.
               </span>
             )}
+          </Field>
+
+          <Field label="상세주소" hint="층·호 등 (선택)">
+            <input
+              ref={detailInputRef}
+              value={form.addressDetail}
+              onChange={(e) => set("addressDetail", e.target.value)}
+              className={inputClass}
+              placeholder="예: 1층, 3층 302호"
+            />
           </Field>
 
           <Field label="소개" hint="가게를 소개하는 글 (목록·지도에 표시)">

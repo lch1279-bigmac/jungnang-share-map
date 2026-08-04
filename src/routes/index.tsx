@@ -1,9 +1,20 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Search, HeartHandshake, MapPinned } from "lucide-react";
-import { shops, categories, dongs, type Category, type Shop } from "@/data/shops";
+import { Search, HeartHandshake, MapPinned, Plus, Download, RotateCcw, Trash2 } from "lucide-react";
+import { categories, dongOrder, type Category, type Shop } from "@/data/shops";
+import {
+  useShops,
+  useIsCustomized,
+  updateShop,
+  deleteShop,
+  addShop,
+  resetShops,
+  downloadShopsJson,
+  type ShopRecord,
+} from "@/data/shopsStore";
 import { ShopCard } from "@/components/ShopCard";
+import { ShopFormModal } from "@/components/ShopFormModal";
 import { MapPanel } from "@/components/MapPanel";
 
 export const Route = createFileRoute("/")({
@@ -26,10 +37,29 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const shops = useShops();
+  const customized = useIsCustomized();
+
   const [query, setQuery] = useState("");
   const [cat, setCat] = useState<Category | "전체">("전체");
   const [dong, setDong] = useState<string | "전체">("전체");
-  const [selected, setSelected] = useState<Shop | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+
+  // 편집/추가 모달: formOpen=false면 닫힘, editTarget=null이면 추가 모드
+  const [formOpen, setFormOpen] = useState(false);
+  const [editTarget, setEditTarget] = useState<ShopRecord | null>(null);
+  // 삭제 확인 대상
+  const [pendingDelete, setPendingDelete] = useState<ShopRecord | null>(null);
+
+  const selected = useMemo(
+    () => shops.find((s) => s.id === selectedId) ?? null,
+    [shops, selectedId],
+  );
+
+  const dongs = useMemo(
+    () => dongOrder.filter((d) => shops.some((s) => s.dong === d)),
+    [shops],
+  );
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -43,7 +73,32 @@ function Index() {
         s.service.toLowerCase().includes(q)
       );
     });
-  }, [query, cat, dong]);
+  }, [shops, query, cat, dong]);
+
+  function openAdd() {
+    setEditTarget(null);
+    setFormOpen(true);
+  }
+
+  function openEdit(shop: ShopRecord) {
+    setEditTarget(shop);
+    setFormOpen(true);
+  }
+
+  function handleSave(data: Shop) {
+    if (editTarget) {
+      updateShop(editTarget.id, data);
+    } else {
+      addShop(data);
+    }
+    setFormOpen(false);
+    setEditTarget(null);
+  }
+
+  function confirmDelete() {
+    if (pendingDelete) deleteShop(pendingDelete.id);
+    setPendingDelete(null);
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -55,7 +110,7 @@ function Index() {
           >
             <HeartHandshake className="size-5" />
           </div>
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <h1 className="truncate text-lg font-extrabold leading-tight text-foreground">
               중랑구 나눔가게 지도
             </h1>
@@ -63,6 +118,12 @@ function Index() {
               따뜻한 마음을 나누는 우리동네 {shops.length}곳
             </p>
           </div>
+          <button
+            onClick={openAdd}
+            className="flex shrink-0 items-center gap-1.5 rounded-xl bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+          >
+            <Plus className="size-4" /> <span className="hidden sm:inline">가게 추가</span>
+          </button>
         </div>
       </header>
 
@@ -114,15 +175,52 @@ function Index() {
             </div>
           </div>
 
-          <p className="text-xs text-muted-foreground">{filtered.length}개 가게</p>
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-xs text-muted-foreground">{filtered.length}개 가게</p>
+            <div className="flex items-center gap-1.5">
+              {customized && (
+                <button
+                  onClick={() => {
+                    if (
+                      window.confirm(
+                        "수정·삭제한 내용을 모두 지우고 원본으로 되돌릴까요? 내보내지 않은 변경은 사라집니다.",
+                      )
+                    ) {
+                      resetShops();
+                    }
+                  }}
+                  className="flex items-center gap-1 rounded-lg border border-border bg-background px-2.5 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:bg-muted"
+                  title="원본으로 되돌리기"
+                >
+                  <RotateCcw className="size-3.5" /> 초기화
+                </button>
+              )}
+              <button
+                onClick={downloadShopsJson}
+                className="flex items-center gap-1 rounded-lg border border-border bg-background px-2.5 py-1.5 text-xs font-semibold text-foreground transition-colors hover:bg-muted"
+                title="현재 목록을 shops.json 파일로 내려받기"
+              >
+                <Download className="size-3.5" /> JSON 내보내기
+              </button>
+            </div>
+          </div>
+
+          {customized && (
+            <p className="-mt-1 rounded-xl bg-secondary/50 px-3 py-2 text-xs text-secondary-foreground">
+              변경사항은 이 브라우저에만 저장돼요. 모두에게 반영하려면 <b>JSON 내보내기</b>로
+              받은 파일을 <code>src/data/shops.json</code>에 넣고 커밋하세요.
+            </p>
+          )}
 
           <div className="flex flex-col gap-2.5">
             {filtered.map((shop) => (
               <ShopCard
-                key={shop.name + shop.address}
+                key={shop.id}
                 shop={shop}
-                active={selected?.name === shop.name}
-                onSelect={() => setSelected(shop)}
+                active={selectedId === shop.id}
+                onSelect={() => setSelectedId(shop.id)}
+                onEdit={() => openEdit(shop)}
+                onDelete={() => setPendingDelete(shop)}
               />
             ))}
             {filtered.length === 0 && (
@@ -131,14 +229,13 @@ function Index() {
               </p>
             )}
           </div>
-
         </section>
 
         {/* Map column (desktop) */}
         <section className="hidden lg:block">
           <div className="sticky top-24 h-[calc(100vh-7.5rem)]">
             {selected ? (
-              <MapPanel shop={selected} onClose={() => setSelected(null)} />
+              <MapPanel shop={selected} onClose={() => setSelectedId(null)} />
             ) : (
               <EmptyMap />
             )}
@@ -155,7 +252,7 @@ function Index() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <div className="absolute inset-0 bg-foreground/40" onClick={() => setSelected(null)} />
+            <div className="absolute inset-0 bg-foreground/40" onClick={() => setSelectedId(null)} />
             <motion.div
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
@@ -163,9 +260,61 @@ function Index() {
               transition={{ type: "spring", damping: 30, stiffness: 320 }}
               className="absolute inset-x-0 bottom-0 top-12 p-3"
             >
-              <MapPanel shop={selected} onClose={() => setSelected(null)} />
+              <MapPanel shop={selected} onClose={() => setSelectedId(null)} />
             </motion.div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* 편집 / 추가 모달 */}
+      <AnimatePresence>
+        {formOpen && (
+          <ShopFormModal
+            shop={editTarget}
+            onSave={handleSave}
+            onClose={() => {
+              setFormOpen(false);
+              setEditTarget(null);
+            }}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* 삭제 확인 */}
+      <AnimatePresence>
+        {pendingDelete && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div className="absolute inset-0 bg-foreground/40" onClick={() => setPendingDelete(null)} />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.96 }}
+              className="relative z-10 w-full max-w-sm rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-soft)]"
+            >
+              <div className="flex size-11 items-center justify-center rounded-2xl bg-destructive/10 text-destructive">
+                <Trash2 className="size-5" />
+              </div>
+              <h2 className="mt-3 text-lg font-extrabold text-card-foreground">가게 삭제</h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                <b className="text-card-foreground">{pendingDelete.name}</b> 을(를) 목록에서
+                삭제할까요? 이 브라우저에서만 삭제되며, 초기화하면 되돌릴 수 있어요.
+              </p>
+              <div className="mt-5 flex justify-end gap-2">
+                <button
+                  onClick={() => setPendingDelete(null)}
+                  className="rounded-xl border border-border bg-background px-4 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-muted"
+                >
+                  취소
+                </button>
+                <button
+                  onClick={confirmDelete}
+                  className="rounded-xl bg-destructive px-4 py-2 text-sm font-semibold text-destructive-foreground transition-opacity hover:opacity-90"
+                >
+                  삭제
+                </button>
+              </div>
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </div>

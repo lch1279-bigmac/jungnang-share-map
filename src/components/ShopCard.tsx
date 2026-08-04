@@ -1,5 +1,5 @@
 import type { Shop } from "@/data/shops";
-import { MapPin } from "lucide-react";
+import { MapPin, Pencil, Trash2 } from "lucide-react";
 
 const catStyles: Record<string, string> = {
   "식품": "bg-food/12 text-food",
@@ -11,39 +11,70 @@ export function ShopCard({
   shop,
   active,
   onSelect,
+  onEdit,
+  onDelete,
 }: {
   shop: Shop;
   active: boolean;
   onSelect: () => void;
+  onEdit: () => void;
+  onDelete: () => void;
 }) {
   return (
-    <button
-      onClick={onSelect}
-      className={`w-full text-left rounded-2xl border bg-card p-4 transition-colors active:scale-[0.99] ${
+    <div
+      className={`group relative rounded-2xl border bg-card transition-colors ${
         active
           ? "border-primary ring-2 ring-primary/30 shadow-[var(--shadow-soft)]"
           : "border-border hover:border-primary/40 shadow-[var(--shadow-card)]"
       }`}
     >
-      <div className="flex items-start justify-between gap-2">
-        <h3 className="font-bold text-card-foreground leading-snug">{shop.name}</h3>
-        <span
-          className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ${
-            catStyles[shop.category] ?? "bg-muted text-muted-foreground"
-          }`}
-        >
-          {shop.category}
-        </span>
-      </div>
-      {shop.service && (
-        <p className="mt-1.5 text-sm text-muted-foreground line-clamp-1">
-          나눔: {shop.service}
+      <button
+        onClick={onSelect}
+        className="w-full text-left rounded-2xl p-4 transition-transform active:scale-[0.99]"
+      >
+        <div className="flex items-start justify-between gap-2">
+          {/* 수정/삭제 버튼과 겹치지 않도록 오른쪽 여백 확보 */}
+          <h3 className="font-bold text-card-foreground leading-snug pr-16">
+            {shop.name}
+          </h3>
+          <span
+            className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ${
+              catStyles[shop.category] ?? "bg-muted text-muted-foreground"
+            }`}
+          >
+            {shop.category}
+          </span>
+        </div>
+        {shop.service && (
+          <p className="mt-1.5 text-sm text-muted-foreground line-clamp-1">
+            나눔: {shop.service}
+          </p>
+        )}
+        <p className="mt-2 flex items-start gap-1 text-xs text-muted-foreground">
+          <MapPin className="mt-0.5 size-3.5 shrink-0" />
+          <span className="line-clamp-1">{shop.address || "주소 미등록"}</span>
         </p>
-      )}
-      <p className="mt-2 flex items-start gap-1 text-xs text-muted-foreground">
-        <MapPin className="mt-0.5 size-3.5 shrink-0" />
-        <span className="line-clamp-1">{shop.address || "주소 미등록"}</span>
-      </p>
-    </button>
+      </button>
+
+      {/* 수정 / 삭제 액션 (카드 우상단, 카테고리 배지 아래) */}
+      <div className="absolute right-3 top-11 flex gap-1">
+        <button
+          onClick={onEdit}
+          aria-label={`${shop.name} 수정`}
+          title="수정"
+          className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+        >
+          <Pencil className="size-4" />
+        </button>
+        <button
+          onClick={onDelete}
+          aria-label={`${shop.name} 삭제`}
+          title="삭제"
+          className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+        >
+          <Trash2 className="size-4" />
+        </button>
+      </div>
+    </div>
   );
 }

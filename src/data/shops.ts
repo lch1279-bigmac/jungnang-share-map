@@ -21,16 +21,15 @@ export const categories: { key: Category; label: string; emoji: string }[] = [
 ];
 
 // 동 목록 (가게 수 많은 순, 면목동 우선 / 미등록·구외는 뒤로)
-const dongOrder = ["면목동", "상봉동", "중화동", "신내동", "망우동", "묵동", "중랑구 외", "주소 미등록"];
+export const dongOrder = ["면목동", "상봉동", "중화동", "신내동", "망우동", "묵동", "중랑구 외", "주소 미등록"];
 export const dongs: string[] = dongOrder.filter((d) => shops.some((s) => s.dong === d));
 
 
-// 가게 이름을 우선으로 한 검색어 (주소는 정확도 보조용)
+// 실제 주소를 우선으로 한 검색어 (주소가 없을 때만 가게 이름으로 대체)
 function shopQuery(shop: Shop) {
-  const parts = [shop.name];
-  if (shop.dong && shop.dong !== "주소 미등록") parts.push(shop.dong);
-  parts.push("서울 중랑구");
-  return parts.join(" ");
+  const addr = shop.address?.trim();
+  if (addr && addr !== "-" && addr !== "주소 미등록") return addr;
+  return `${shop.name} 서울 중랑구`;
 }
 
 export function mapEmbedUrl(shop: Shop) {

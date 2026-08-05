@@ -10,6 +10,8 @@ import {
   ShieldCheck,
   Loader2,
   AlertTriangle,
+  Bell,
+  MessageSquarePlus,
 } from "lucide-react";
 import { categories, dongOrder, type Category, type Shop } from "@/data/shops";
 import {
@@ -19,9 +21,12 @@ import {
   useDeleteShop,
   type ShopRecord,
 } from "@/data/shopsStore";
+import { useUnhandledFeedbackCount } from "@/data/feedbackStore";
 import { ShopCard } from "@/components/ShopCard";
 import { ShopFormModal } from "@/components/ShopFormModal";
 import { TrashModal } from "@/components/TrashModal";
+import { FeedbackModal } from "@/components/FeedbackModal";
+import { FeedbackInbox } from "@/components/FeedbackInbox";
 import { MapPanel } from "@/components/MapPanel";
 
 /**
@@ -50,6 +55,11 @@ export function ShopExplorer({
   const [editTarget, setEditTarget] = useState<ShopRecord | null>(null);
   const [pendingDelete, setPendingDelete] = useState<ShopRecord | null>(null);
   const [trashOpen, setTrashOpen] = useState(false);
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
+  const [inboxOpen, setInboxOpen] = useState(false);
+
+  // 관리자: 미처리 접수 개수(알림 배지). 공개 페이지에선 조회 안 함.
+  const { data: unhandledCount = 0 } = useUnhandledFeedbackCount(admin);
 
   const selected = useMemo(
     () => shops.find((s) => s.id === selectedId) ?? null,
@@ -156,6 +166,18 @@ export function ShopExplorer({
           </div>
           {admin && (
             <>
+              <button
+                onClick={() => setInboxOpen(true)}
+                title="의견·수정요청 접수함"
+                className="relative flex shrink-0 items-center justify-center rounded-xl border border-border bg-background p-2 text-muted-foreground transition-colors hover:bg-muted"
+              >
+                <Bell className="size-4" />
+                {unhandledCount > 0 && (
+                  <span className="absolute -right-1.5 -top-1.5 flex min-w-[1.15rem] items-center justify-center rounded-full bg-destructive px-1 text-[11px] font-bold leading-5 text-destructive-foreground">
+                    {unhandledCount > 99 ? "99+" : unhandledCount}
+                  </span>
+                )}
+              </button>
               <button
                 onClick={openAdd}
                 className="flex shrink-0 items-center gap-1.5 rounded-xl bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
@@ -378,6 +400,32 @@ export function ShopExplorer({
       {/* 휴지통 (admin 전용) */}
       <AnimatePresence>
         {admin && trashOpen && <TrashModal onClose={() => setTrashOpen(false)} />}
+      </AnimatePresence>
+
+      {/* 공개 페이지: 의견·수정요청 플로팅 버튼 */}
+      {!admin && (
+        <button
+          onClick={() => setFeedbackOpen(true)}
+          className="fixed bottom-5 right-5 z-30 flex items-center gap-2 rounded-full bg-primary px-4 py-3 text-sm font-bold text-primary-foreground shadow-[var(--shadow-soft)] transition-opacity hover:opacity-90"
+        >
+          <MessageSquarePlus className="size-5" />
+          <span className="hidden sm:inline">의견·수정요청</span>
+        </button>
+      )}
+
+      {/* 의견 접수 폼 (공개) — 보고 있던 가게가 있으면 이름 미리 채움 */}
+      <AnimatePresence>
+        {feedbackOpen && (
+          <FeedbackModal
+            defaultShopName={selected?.name ?? ""}
+            onClose={() => setFeedbackOpen(false)}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* 접수함 (admin 전용) */}
+      <AnimatePresence>
+        {admin && inboxOpen && <FeedbackInbox onClose={() => setInboxOpen(false)} />}
       </AnimatePresence>
     </div>
   );

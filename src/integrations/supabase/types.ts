@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      feedback: {
+        Row: {
+          id: string
+          shop_name: string
+          message: string
+          contact: string
+          handled: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          shop_name?: string
+          message: string
+          contact?: string
+          handled?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          shop_name?: string
+          message?: string
+          contact?: string
+          handled?: boolean
+          created_at?: string
+        }
+        Relationships: []
+      }
       shops: {
         Row: {
           address: string

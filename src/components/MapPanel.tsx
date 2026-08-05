@@ -65,12 +65,12 @@ export function MapPanel({
 
       <div className="grid grid-cols-3 border-t border-border">
         <a
-          href={mapLinkUrl(shop)}
+          href={naverMapUrl(shop)}
           target="_blank"
           rel="noreferrer"
-          className="flex items-center justify-center gap-1.5 bg-primary py-3.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+          className="flex items-center justify-center gap-1.5 bg-[#03C75A] py-3.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
         >
-          구글지도 <ExternalLink className="size-3.5" />
+          네이버지도 <ExternalLink className="size-3.5" />
         </a>
         <a
           href={kakaoMapUrl(shop)}
@@ -81,12 +81,12 @@ export function MapPanel({
           카카오지도 <ExternalLink className="size-3.5" />
         </a>
         <a
-          href={naverMapUrl(shop)}
+          href={mapLinkUrl(shop)}
           target="_blank"
           rel="noreferrer"
-          className="flex items-center justify-center gap-1.5 border-l border-border bg-[#03C75A] py-3.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+          className="flex items-center justify-center gap-1.5 border-l border-border bg-primary py-3.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
         >
-          네이버지도 <ExternalLink className="size-3.5" />
+          구글지도 <ExternalLink className="size-3.5" />
         </a>
       </div>
     </motion.div>

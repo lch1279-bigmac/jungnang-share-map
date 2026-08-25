@@ -78,15 +78,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: "우리동네 나눔가게 및 아름다운 이웃 지도" },
       { property: "og:description", content: "서울 중랑구의 나눔가게를 식품·생활·의류·보건의료로 살펴보고, 가게를 누르면 구글지도로 위치를 확인할 수 있는 모바일 친화 지도 앱." },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://jungnang-share-map.vercel.app/" },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "우리동네 나눔가게 및 아름다운 이웃 지도" },
       { name: "twitter:description", content: "서울 중랑구의 나눔가게를 식품·생활·의류·보건의료로 살펴보고, 가게를 누르면 구글지도로 위치를 확인할 수 있는 모바일 친화 지도 앱." },
       // 카카오톡·페이스북 등은 webp OG 이미지를 지원하지 않아, JPG로 변환해 자체 호스팅(public/og-image.jpg)
-      // TODO: Vercel 배포 도메인이 정해지면 절대 URL로 교체 (예: https://<domain>/og-image.jpg)
-      { property: "og:image", content: "/og-image.jpg" },
-      { name: "twitter:image", content: "/og-image.jpg" },
+      { property: "og:image", content: "https://jungnang-share-map.vercel.app/og-image.jpg" },
+      { name: "twitter:image", content: "https://jungnang-share-map.vercel.app/og-image.jpg" },
     ],
     links: [
       {

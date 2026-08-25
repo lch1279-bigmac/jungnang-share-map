@@ -14,25 +14,19 @@
 
 모바일로도 사용할 수 있느 반응형 앱으로 만들어줘
 
-This project was built with [Lovable](https://lovable.dev).
-
-**Live app**: https://jungnang-share-map.lovable.app
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/5d736b44-e79a-4426-aa77-10d1901bfd93).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
 ## Development
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+Requires [Bun](https://bun.sh).
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
+git clone https://github.com/lch1279-bigmac/jungnang-share-map.git
+cd jungnang-share-map
+bun install
+bun run dev
 ```
+
+Copy `.env.example` to `.env` and fill in your Supabase project's values before running.
+
+## Stack
+
+TanStack Start + Vite + Tailwind CSS v4 + Supabase, deployed on Vercel.

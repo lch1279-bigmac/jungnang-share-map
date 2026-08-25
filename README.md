@@ -33,3 +33,4 @@ TanStack Start + Vite + Tailwind CSS v4 + Supabase, deployed on Vercel.
 
 Deployed with Supabase project `izifyvnccciectrxefst`.
 
+

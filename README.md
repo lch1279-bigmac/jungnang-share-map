@@ -30,3 +30,5 @@ Copy `.env.example` to `.env` and fill in your Supabase project's values before 
 ## Stack
 
 TanStack Start + Vite + Tailwind CSS v4 + Supabase, deployed on Vercel.
+
+Deployed with Supabase project `izifyvnccciectrxefst`.

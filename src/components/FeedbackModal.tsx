@@ -90,6 +90,7 @@ export function FeedbackModal({
               </span>
               <input
                 value={shopName}
+                maxLength={100}
                 onChange={(e) => setShopName(e.target.value)}
                 className={inputClass}
                 placeholder="어느 가게에 대한 의견인가요?"
@@ -102,6 +103,7 @@ export function FeedbackModal({
               </span>
               <textarea
                 value={message}
+                maxLength={2000}
                 onChange={(e) => setMessage(e.target.value)}
                 rows={4}
                 autoFocus
@@ -116,6 +118,7 @@ export function FeedbackModal({
               </span>
               <input
                 value={contact}
+                maxLength={100}
                 onChange={(e) => setContact(e.target.value)}
                 className={inputClass}
                 placeholder="전화번호 또는 이메일"

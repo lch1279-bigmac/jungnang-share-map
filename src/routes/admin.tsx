@@ -49,7 +49,64 @@ function AdminPage() {
     return <LoginForm />;
   }
 
-  return <ShopExplorer admin onLogout={handleLogout} />;
+  return <AdminGate userId={session.user.id} email={session.user.email} onLogout={handleLogout} />;
+}
+
+// 로그인했더라도 admins 허용 목록에 있는 사용자만 관리자 화면을 보여준다 (실제 권한은 DB RLS가 강제).
+function AdminGate({
+  userId,
+  email,
+  onLogout,
+}: {
+  userId: string;
+  email?: string;
+  onLogout: () => void;
+}) {
+  const [state, setState] = useState<"checking" | "yes" | "no" | "error">("checking");
+
+  useEffect(() => {
+    let cancelled = false;
+    setState("checking");
+    supabase.rpc("is_admin").then(({ data, error }) => {
+      if (cancelled) return;
+      if (error) setState("error");
+      else setState(data ? "yes" : "no");
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [userId]);
+
+  if (state === "checking") {
+    return (
+      <div className="flex min-h-screen items-center justify-center gap-2 bg-background text-sm text-muted-foreground">
+        <Loader2 className="size-4 animate-spin" /> 권한 확인 중…
+      </div>
+    );
+  }
+
+  if (state === "yes") {
+    return <ShopExplorer admin onLogout={onLogout} />;
+  }
+
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center gap-3 bg-background px-4 text-center">
+      <ShieldCheck className="size-8 text-muted-foreground" />
+      <p className="text-sm font-semibold text-foreground">
+        {state === "no"
+          ? "관리자 권한이 없는 계정이에요."
+          : "권한을 확인하지 못했어요. 잠시 후 다시 시도해 주세요."}
+      </p>
+      {email && <p className="text-xs text-muted-foreground">{email}</p>}
+      <button
+        type="button"
+        onClick={onLogout}
+        className="mt-2 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+      >
+        로그아웃
+      </button>
+    </div>
+  );
 }
 
 function LoginForm() {
@@ -73,6 +130,20 @@ function LoginForm() {
     // 성공 시 onAuthStateChange가 세션을 갱신해 관리자 화면으로 전환됨
   }
 
+  async function signInWithGoogle() {
+    setSubmitting(true);
+    setError(null);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: `${window.location.origin}/admin` },
+    });
+    // 성공하면 구글 로그인 페이지로 이동하므로 이후 코드는 실패했을 때만 의미가 있다.
+    if (error) {
+      setSubmitting(false);
+      setError("구글 로그인을 시작하지 못했어요. 잠시 후 다시 시도해 주세요.");
+    }
+  }
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <motion.form
@@ -94,7 +165,28 @@ function LoginForm() {
           우리동네 나눔가게 및 아름다운 이웃 지도 관리
         </p>
 
-        <div className="mt-6 flex flex-col gap-3">
+        <button
+          type="button"
+          onClick={signInWithGoogle}
+          disabled={submitting}
+          className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-background px-4 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-muted disabled:opacity-50"
+        >
+          <svg viewBox="0 0 48 48" className="size-4" aria-hidden="true">
+            <path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z" />
+            <path fill="#4285F4" d="M46.1 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.4c-.5 2.9-2.2 5.3-4.6 6.9l7.1 5.5c4.3-4 6.7-9.9 6.7-16.9z" />
+            <path fill="#FBBC05" d="M10.5 28.7a14.5 14.5 0 0 1 0-9.4l-7.9-6.1a24 24 0 0 0 0 21.6l7.9-6.1z" />
+            <path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.1-5.5c-2 1.4-4.9 2.3-8.8 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z" />
+          </svg>
+          Google로 로그인
+        </button>
+
+        <div className="mt-5 flex items-center gap-3 text-xs text-muted-foreground">
+          <span className="h-px flex-1 bg-border" />
+          또는 이메일
+          <span className="h-px flex-1 bg-border" />
+        </div>
+
+        <div className="mt-5 flex flex-col gap-3">
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-semibold text-muted-foreground">이메일</span>
             <input

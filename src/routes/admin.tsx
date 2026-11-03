@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ShieldCheck, Lock, Loader2 } from "lucide-react";
+import { ShieldCheck, Loader2 } from "lucide-react";
 import type { Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { ShopExplorer } from "@/components/ShopExplorer";
@@ -110,25 +110,8 @@ function AdminGate({
 }
 
 function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [pw, setPw] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
-
-  async function submit(e: React.FormEvent) {
-    e.preventDefault();
-    setSubmitting(true);
-    setError(null);
-    const { error } = await supabase.auth.signInWithPassword({
-      email: email.trim(),
-      password: pw,
-    });
-    setSubmitting(false);
-    if (error) {
-      setError("이메일 또는 비밀번호가 올바르지 않습니다.");
-    }
-    // 성공 시 onAuthStateChange가 세션을 갱신해 관리자 화면으로 전환됨
-  }
 
   async function signInWithGoogle() {
     setSubmitting(true);
@@ -146,8 +129,7 @@ function LoginForm() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <motion.form
-        onSubmit={submit}
+      <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-sm rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-soft)]"
@@ -171,71 +153,25 @@ function LoginForm() {
           disabled={submitting}
           className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-background px-4 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-muted disabled:opacity-50"
         >
-          <svg viewBox="0 0 48 48" className="size-4" aria-hidden="true">
-            <path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z" />
-            <path fill="#4285F4" d="M46.1 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.4c-.5 2.9-2.2 5.3-4.6 6.9l7.1 5.5c4.3-4 6.7-9.9 6.7-16.9z" />
-            <path fill="#FBBC05" d="M10.5 28.7a14.5 14.5 0 0 1 0-9.4l-7.9-6.1a24 24 0 0 0 0 21.6l7.9-6.1z" />
-            <path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.1-5.5c-2 1.4-4.9 2.3-8.8 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z" />
-          </svg>
+          {submitting ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            <svg viewBox="0 0 48 48" className="size-4" aria-hidden="true">
+              <path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z" />
+              <path fill="#4285F4" d="M46.1 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.4c-.5 2.9-2.2 5.3-4.6 6.9l7.1 5.5c4.3-4 6.7-9.9 6.7-16.9z" />
+              <path fill="#FBBC05" d="M10.5 28.7a14.5 14.5 0 0 1 0-9.4l-7.9-6.1a24 24 0 0 0 0 21.6l7.9-6.1z" />
+              <path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.1-5.5c-2 1.4-4.9 2.3-8.8 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z" />
+            </svg>
+          )}
           Google로 로그인
         </button>
-
-        <div className="mt-5 flex items-center gap-3 text-xs text-muted-foreground">
-          <span className="h-px flex-1 bg-border" />
-          또는 이메일
-          <span className="h-px flex-1 bg-border" />
-        </div>
-
-        <div className="mt-5 flex flex-col gap-3">
-          <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-semibold text-muted-foreground">이메일</span>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                setError(null);
-              }}
-              autoFocus
-              autoComplete="username"
-              className={inputClass}
-              placeholder="admin@example.com"
-            />
-          </label>
-          <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-semibold text-muted-foreground">비밀번호</span>
-            <input
-              type="password"
-              value={pw}
-              onChange={(e) => {
-                setPw(e.target.value);
-                setError(null);
-              }}
-              autoComplete="current-password"
-              className={inputClass}
-              placeholder="••••••••"
-            />
-          </label>
-        </div>
 
         {error && (
           <p className="mt-3 rounded-xl bg-destructive/10 px-3 py-2 text-center text-xs font-semibold text-destructive">
             {error}
           </p>
         )}
-
-        <button
-          type="submit"
-          disabled={submitting || !email.trim() || !pw}
-          className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
-        >
-          {submitting ? <Loader2 className="size-4 animate-spin" /> : <Lock className="size-4" />}
-          로그인
-        </button>
-      </motion.form>
+      </motion.div>
     </div>
   );
 }
-
-const inputClass =
-  "w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none transition-shadow focus:ring-2 focus:ring-primary/30";

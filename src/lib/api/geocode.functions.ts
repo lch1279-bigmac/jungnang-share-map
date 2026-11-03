@@ -10,7 +10,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 // 키가 없으면 region:null 을 돌려주고, 클라이언트는 기존 동작(수동 입력)으로 폴백한다.
 export const resolveRegion = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator(z.object({ address: z.string().min(1) }))
+  .validator(z.object({ address: z.string().min(1) }))
   .handler(async ({ data }): Promise<{ region: string | null }> => {
     const key = process.env.KAKAO_REST_API_KEY;
     if (!key) return { region: null };

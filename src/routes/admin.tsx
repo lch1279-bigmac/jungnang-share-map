@@ -120,14 +120,8 @@ function LoginForm() {
     const hash = new URLSearchParams(window.location.hash.replace(/^#/, ""));
     const failed = params.get("error") || hash.get("error");
     if (!failed) return;
-    const code = params.get("error_code") || hash.get("error_code");
-    setError(
-      failed === "access_denied"
-        ? "구글 로그인이 취소되었어요."
-        : code === "signup_disabled" || code === "unexpected_failure" || failed === "server_error"
-          ? "관리자 권한이 없는 계정이에요. 등록된 관리자 계정으로 로그인해 주세요."
-          : "로그인하지 못했어요. 등록된 관리자 계정인지 확인해 주세요.",
-    );
+    // 거부된 계정도 access_denied 등으로 돌아와 취소와 구분하기 어려우므로 같은 안내를 쓴다.
+    setError("관리자 권한이 없는 계정이에요. 등록된 관리자 계정으로 로그인해 주세요.");
     window.history.replaceState(null, "", window.location.pathname);
   }, []);
 

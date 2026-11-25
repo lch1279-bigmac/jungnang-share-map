@@ -98,11 +98,14 @@ on conflict do nothing;
 
 ## 자동 정지 방지 (keep-alive)
 
-Supabase 무료 플랜은 일정 기간 요청이 없으면 프로젝트가 일시정지됩니다. `.github/workflows/keepalive.yml`이 매일 한 번 `shops`를 조회해 이를 방지합니다.
+Supabase 무료 플랜은 **7일간 활동이 없으면 프로젝트가 일시정지**됩니다. 정지돼도 대시보드에서 90일 안에는 복구할 수 있습니다. 단순 조회(읽기) 핑은 활동으로 인정되지 않아 정지된 적이 있어서, 지금은 DB에 실제로 기록하는 함수를 호출합니다.
 
+- `supabase/migrations/20260804000007_keepalive.sql`을 SQL Editor에서 한 번 실행해 `keepalive()` 함수와 기록용 테이블을 만들어야 합니다. 테이블은 직접 읽거나 쓸 수 없고 함수로만 갱신됩니다.
+- `.github/workflows/keepalive.yml`이 매일 한 번 이 함수를 호출합니다.
 - GitHub 저장소 Settings → Secrets and variables → Actions에 `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`를 등록해야 합니다 (공개용 키만 사용, 서비스 키 금지).
-- Actions 탭에서 수동 실행해 성공 여부를 확인할 수 있고, 실패하면 GitHub 알림이 옵니다.
+- Actions 탭에서 수동 실행해 성공 여부를 확인할 수 있고, 실패하면 GitHub 알림이 옵니다. 실패 메일이 오면 대시보드에서 프로젝트가 정지됐는지부터 확인하세요.
 - 저장소에 오래 활동이 없으면 GitHub이 예약 실행을 멈출 수 있으니, 알림이 오면 Actions 탭에서 다시 켜 주세요.
+- 이 방식이 실제로 정지를 막는지는 적용 후 8~10일 이상 지켜봐야 알 수 있습니다. 그래도 정지되면 Pro 플랜이나 정적 데이터 방식을 검토하세요.
 
 ## 운영 메모
 

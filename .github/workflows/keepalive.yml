@@ -1,7 +1,8 @@
 name: Supabase keep-alive
 
-# Supabase 무료 플랜은 일정 기간 요청이 없으면 프로젝트가 일시정지됩니다.
-# 하루에 한 번 가벼운 조회(shops 1건)를 보내 활동 상태를 유지합니다.
+# Supabase 무료 플랜은 7일간 활동이 없으면 프로젝트가 일시정지됩니다.
+# 읽기 조회만으로는 정지를 막지 못했으므로, 하루에 한 번 DB에 기록하는 함수(keepalive)를 호출합니다.
+# 함수는 supabase/migrations/20260804000007_keepalive.sql 에서 만듭니다.
 on:
   schedule:
     - cron: "17 3 * * *" # 매일 03:17 UTC (한국 시간 12:17)
@@ -14,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:
-      - name: Query Supabase
+      - name: Call keepalive() on Supabase
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
@@ -23,12 +24,16 @@ jobs:
             echo "::error::SUPABASE_URL / SUPABASE_PUBLISHABLE_KEY secret is not set"
             exit 1
           fi
-          status=$(curl -sS -o /dev/null -w "%{http_code}" \
+          status=$(curl -sS -o response.txt -w "%{http_code}" \
             --retry 3 --retry-delay 5 --max-time 20 \
+            -X POST \
             -H "apikey: $SUPABASE_PUBLISHABLE_KEY" \
-            "${SUPABASE_URL%/}/rest/v1/shops?select=id&limit=1")
+            -H "Content-Type: application/json" \
+            -d '{}' \
+            "${SUPABASE_URL%/}/rest/v1/rpc/keepalive")
           echo "Supabase responded with HTTP $status"
+          echo "last_ping: $(cat response.txt)"
           if [ "$status" != "200" ]; then
-            echo "::error::Keep-alive query failed (HTTP $status)"
+            echo "::error::Keep-alive call failed (HTTP $status)"
             exit 1
           fi
